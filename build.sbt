@@ -15,9 +15,9 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "2.0.0",
-  "org.typelevel" %% "cats-effect" % "2.2.0",
-  "co.fs2" %% "fs2-core" % "2.4.4",
+  "org.typelevel" %% "cats-core" % "2.0.0" withSources(),
+  "org.typelevel" %% "cats-effect" % "2.2.0" withSources(),
+  "co.fs2" %% "fs2-core" % "2.4.4" withSources(),
   "org.scalatest" %% "scalatest" % "3.2.0" % Test,
   "org.scalatest" %% "scalatest-wordspec" % "3.2.0" % Test
 )

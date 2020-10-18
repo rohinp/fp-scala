@@ -28,17 +28,17 @@ An expected table of content will edit in future as and when I add more code/exe
     2. Parametrically in ADT
     3. Recursive ADT
     4. GADT
-6. Type classes
+6. Data structures in scala (collections)
+    1. List
+    2. Vectors
+    3. Folding on List
+    4. Amortized analysis of algorithm an intro
+7. Type classes
     1. Ad-hoc polymorphism 
     2. The pattern in scala
     3. When too and when not to use it.
     4. Laws for testing
     5. Quick check introduction
-7. Data structures in scala (collections)
-    1. List
-    2. Vectors
-    3. Folding on List
-    4. Amortized analysis of algorithm an intro
 8. Basic type classes from Cats library
     1. Semigroup and Monoid
     2. Functor, Bifunctor and Profunctor
