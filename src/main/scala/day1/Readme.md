@@ -17,3 +17,4 @@
 
 ### Other references
 1. [Regular expression with pattern matching](https://www.scala-lang.org/api/2.12.4/scala/util/matching/Regex.html) 
+1. [Scala Video tutorials](https://www.youtube.com/c/DevInsideYou/playlists)

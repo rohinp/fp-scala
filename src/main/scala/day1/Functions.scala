@@ -80,4 +80,12 @@ object Functions {
   * */
   def flatten[A](l:List[A])(implicit ev: A <:< List[A]):List[A] = ???
 
+  /*A bit of implicits*/
+  //https://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html
+
+  /*
+  * 1. implicit parameter
+  * 2. implicit conversion
+  * 3. context bounds
+  * */
 }
