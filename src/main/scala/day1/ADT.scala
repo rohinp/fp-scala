@@ -1,5 +1,7 @@
 package day1
 
+import day1.CreatingTypes.PhoneType
+
 object ADT extends App {
   //What is a Type
   //What is a Value
@@ -18,6 +20,7 @@ object ADT extends App {
   //Sum type
 
   //product type
+
 
   //domain modeling using ADT
   //IoT Domain, representing devices communicating with Http and others with MQtt
@@ -54,8 +57,6 @@ object ADT extends App {
   //sealed traits and match errors in pattern matching
   // For more details check here https://scala-lang.org/files/archive/spec/2.12/08-pattern-matching.html
 
-
-  //Using the solution from exercise 1
 
   //Lets construct some objects using smart constructors
 
@@ -98,5 +99,25 @@ object ADT extends App {
   * */
   def computeTuple(t:(Int,Int)):Option[Int] = ???
 
+  /*
+  * Exercise 8
+  *
+  * Pattern match on multiple object containing a domain
+  * */
+  case class Address(
+                       street: String,
+                       city: String,
+                       postalCode: String,
+                       state: String
+                     )
+  sealed trait PhoneType
+  case object HomePhone extends PhoneType
+  case object WorkPhone extends PhoneType
+  case object Other extends PhoneType
+
+  case class Person(firstName:String, lastName:String, address: Address, phoneType: PhoneType)
+
+  def checkIfPersonHasWorkPhone(person: Person):Boolean = ???
+  def checkIfPersonAreFromGivenCity(person: Person, city:String):Boolean = ???
 
 }
