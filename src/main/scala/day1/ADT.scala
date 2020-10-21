@@ -12,7 +12,7 @@ object ADT extends App {
   val u:Unit = ()
   //Tuples in scala
   val t = (1,"rr")
-  //basic scala constructs use to represent a type {class, case class, trait, object, case object, sealed trait} and type alias
+  //basic scala constructs use to represent a type {class, case class, trait, object, case object, sealed trait, Enumeration} and type alias
 
   //What is ADT? (Algebraic data type)
   //https://about.chatroulette.com/posts/algebraic-data-types/

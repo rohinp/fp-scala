@@ -1,5 +1,7 @@
 package day1
 
+import scala.Option
+
 object CreatingTypes extends App {
   //Class in scala
 
@@ -18,14 +20,15 @@ object CreatingTypes extends App {
   //lets make the fields available by using val
   //all the fields are private
   //this wont work add1.street
-
   class Address2(
       val street: String,
-      val city: String,
+      val city: String = "test",
       val postalCode: String,
       val state: String
   )
   val add2 = new Address2("street", "city", "1234", "state")
+  //named fields and default values assigned
+  val add22 = new Address2(street = "street", postalCode = "1234", state = "state")
   //now the fields are public and immutable
   add2.street
 
@@ -51,7 +54,7 @@ object CreatingTypes extends App {
       state: String
   )
 
-  val add4 = Address4("street11", "city", "1234", "state")
+  val add4 = Address4("street11", "city", "1234", "state") //syntactic sugar for apply
   val add5 = Address4.apply("street", "city", "1234", "state")
   /*
   1. apply
@@ -60,6 +63,9 @@ object CreatingTypes extends App {
   4. canEqual
   5. It makes the object serializable
    */
+  add4.canEqual("string") //false
+  add4.canEqual(add5) //true
+
   println(add4.toString)
   println(add4.productArity)
   println(add4.productElement(0))
@@ -76,7 +82,8 @@ object CreatingTypes extends App {
   //Tuples can also be used to create state /data
   //Tuple is nothing but a case class with syntactic sugar and extra swap function
 
-  val t2 = (1, "second") // Tuple2(1,2)
+  val t2 = (1, "second") // syntactic sugar for tuple
+  val t22 = Tuple2(1,"second")
   //we can access tuple values with _{number} field names given by the tuple case class
   t2._1
   t2._2
@@ -84,11 +91,11 @@ object CreatingTypes extends App {
   val t3 = (3, "three", 1.2d)
 
   //object is like a factory class
-  object factory {
+  object singletonObject {
     //all your functions
     def someFunc(t: Int): Int = t
   }
-  factory.someFunc(23)
+  singletonObject.someFunc(23)
   //case object is same as object except it give things mentioned below for free
   /*
    * 1. toString
@@ -105,15 +112,14 @@ object CreatingTypes extends App {
 
   //also we can have some abstract behaviour behaviour
   trait Switchable {
-    def toggleSwitch(currentState: Boolean): Boolean
+    //default implementation
+    def toggleSwitch(currentState: Boolean): Boolean = !currentState
   }
   case class Fan(state: Boolean, speed: Int) extends Switchable {
     override def toggleSwitch(currentState: Boolean): Boolean =
       if (speed == 0) false else state && currentState
   }
-  object Bulb extends Switchable {
-    override def toggleSwitch(currentState: Boolean): Boolean = !currentState
-  }
+  object Bulb extends Switchable
 
   //we can also have sealed traits
   sealed trait PhoneType
