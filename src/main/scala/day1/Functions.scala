@@ -14,7 +14,7 @@ object Functions {
 
   //Partial Functions a big no
 
-  //Function composition
+  //Function composition (compose, andThen, tap, and pipe)
 
   //Basic Parametric polymorphic functions
 

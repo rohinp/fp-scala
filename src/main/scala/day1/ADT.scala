@@ -7,7 +7,7 @@ object ADT extends App {
   //What is a Value
 
   //A type with empty set
-  val x:Nothing = ???
+  lazy val x:Nothing = ???
   //A type with singleton set
   val u:Unit = ()
   //Tuples in scala
