@@ -3,7 +3,8 @@ package day1
 object ParserCombinator {
   //We will be implementing a simple mono parser from here http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
   //To begin with the exercise lets create a type for the parser
-  case class Parser[A](parse:String => List[(A,String)])
+  //extending AnyVal removes the wrapper overhead at runtime for more information check here https://docs.scala-lang.org/overviews/core/value-classes.html
+  case class Parser[A](parse:String => List[(A,String)]) extends AnyVal
 
   object Parser {
     //Now that we have a parser type, let's create some primitive types
@@ -25,9 +26,22 @@ object ParserCombinator {
     //3. Bind
     def bind[A,B]:Parser[A] => (A => Parser[B]) => Parser[B] = ???
 
-    //Exercise try to implement seq using bind
+    //Exercise: try to implement seq using bind
 
-    //
+    //Exercise sat combinator; Hint: implement using bind and item
+    def sat:(Char => Boolean) => Parser[Char] = ???
+
+    //implement car parser using sat
+    def char:Char => Parser[Char] = ???
+
+    //implement digit parser using sat
+    def digit:Parser[Char] = ???
+
+    //implement lower case parser using sat
+    def lower:Parser[Char] = ???
+
+    //implement upper case parser using sat
+    def upper:Parser[Char] = ???
 
   }
 }

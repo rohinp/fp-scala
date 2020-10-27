@@ -33,33 +33,16 @@ An expected table of content will edit in future as and when I add more code/exe
     2. Vectors
     3. Folding on List
     4. Amortized analysis of algorithm an intro
-7. Type classes
-    1. Ad-hoc polymorphism 
-    2. The pattern in scala
-    3. When too and when not to use it.
-    4. Laws for testing
-    5. Quick check introduction
-8. Basic type classes from Cats library
-    1. Semigroup and Monoid
-    2. Functor, Bifunctor and Profunctor
-9. Semigroupal, Apply and Applicative
-    1. Error handling and Validation
-    2. Validated
-10. Monad and Kliesli
-11. Reader
-12. Foldable
-13. Traverse
-14. Managing state with State Monad
-15. Monad Transformers and MTL library
-16. FunctionK, FreeApplicative and FreeMonad
-17. Effect system and more
-    1. Concurrency basics.
-    2. Intro to cats IO
+7. Topics from Scala with cats book 
+    i. from chapter 1 to chapter 7
+8. Effect system and more
+    1. Concurrency basics and Future in scala.
+    2. Intro to cats effects IO
         1. Will add more topics here as we are still learning and using it I projects like MVars, ref and concurrency from cats effects
     3. Concurrency with green threads
     4. Best practices for thread pools in production application (JVM)
-18. Tagless Initial, sample project
-19. Tagless Final, sample project
-20. Stream processing using FS2
+9. Tagless Initial, sample project
+10. Tagless Final, sample project
+11. Stream processing using FS2
     1. Stream basics
     2. Concurrency primitives by FS2

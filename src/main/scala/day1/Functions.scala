@@ -1,7 +1,7 @@
 package day1
 
 object Functions {
-  //Understanding functions in scala (functions are objects)
+  //Understanding functions in scala (functions are objects) ans SAM (Single Abstract Method)
   //lambdas to begin with
 
   //Functions vs Methods and Eta expansion (https://stackoverflow.com/questions/39445018/what-is-the-eta-expansion-in-scala)
@@ -42,7 +42,7 @@ object Functions {
   def uncurry[A,B,C](f:A => B => C): (A, B) => C = ???
   def flipArgs[A,B,C](f:A => B => C): B => A => C = ???
 
-  //Pure functions & side effects
+  //Pure functions & side effects introduction
 
   //Simple recursion examples along with a recursive data structure
   sealed trait MyList[A]
