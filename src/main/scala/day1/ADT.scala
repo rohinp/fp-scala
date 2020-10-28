@@ -16,22 +16,31 @@ object ADT extends App {
 
   //What is ADT? (Algebraic data type)
   //https://about.chatroulette.com/posts/algebraic-data-types/
-  //Arity of a type
 
-  //Sum type e.g. Boolean, Option, Either, etc.
+  //Sum type e.g. Boolean, Option, Either, etc. Or
+  def div(n: Int, d: Int): Option[Int] = if (d == 0) None else Some(n / d)
 
-  //product type Person, Employee, etc.
+  def div1(n: Int, d: Int): Either[String, Int] =
+    if (d == 0) Left("Div by zero not possible") else Right(n / d)
 
   /**
     * domain modeling using ADT
     * IoT Domain, representing devices communicating with Http and others with MQtt
     */
+  type HostPort = (String, String)
   sealed trait IoTProtocol
+  case class HTTP(host: String, port: String, isSecure: Boolean)
+      extends IoTProtocol
+  case class MQTT(brokers: List[HostPort], isSecure: Boolean)
+      extends IoTProtocol
 
   /**
     * One more example, Shipping types
     */
   sealed trait ShippingType
+  case object Post extends ShippingType
+  case object FedX extends ShippingType
+  case object DHL extends ShippingType
 
   /*-All exercises below are assumed to be solved only using sealed trait , case classes and case objects-*/
   /**
@@ -61,6 +70,23 @@ object ADT extends App {
   //6.  Alias in pattern matching
   //7.  sealed traits and match errors in pattern matching
 
+  val http: IoTProtocol = HTTP("", "", isSecure = false)
+
+  def processRequest(protocol: IoTProtocol): String =
+    protocol match {
+      case MQTT(bs, b)  => s"Running a MQTT broker for servers ${bs.mkString(",")} and isSecure $b"
+      case HTTP(h, p, b) if b => s"Running a secure HTTP server for $h, $p"
+      case http@HTTP(_, _, _) => s"Running a HTTP server for $http"
+      //case _ => s"Not an MQTT"
+    }
+
+  val str = "2"
+  val S = "a"
+  val D = "b"
+  str match {
+    case S | D | "c" | `str` => println("This is correct")
+  }
+
   /**
     * Exercise 4
     * Pattern match on an expression to print what type of value it returns
@@ -81,6 +107,7 @@ object ADT extends App {
 
   /*"2004-01-20" match {
     case ??? => "It's a date!"
+    case _ => "It's not a valid date"
   }*/
 
   /*"2004-01-20" match {
@@ -91,7 +118,6 @@ object ADT extends App {
     * Exercise 6
     * Pattern match on an Option inside either
     */
-
   type Input = Either[String, Option[String]]
   /*def getStringFrom(input:Input) : String = input match {
     case ??? => "implement this method"
@@ -137,11 +163,11 @@ object ADT extends App {
   case object InvalidAddress extends Errors
   case object InvalidPerson extends Errors
   //helper functions
-  def emptyString:String => Boolean = ???
+  def emptyString: String => Boolean = ???
 
   //Lets make some smart constructors
-  def makeAddress(address: Address):Either[Errors, Address] = ???
-  def makePerson(person:Person):Either[Errors, Person] = ???
+  def makeAddress(address: Address): Either[Errors, Address] = ???
+  def makePerson(person: Person): Either[Errors, Person] = ???
 
   //Testing, create a sample person and tryout the person smart constructor
 }
