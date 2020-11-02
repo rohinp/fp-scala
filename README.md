@@ -33,8 +33,14 @@ An expected table of content will edit in future as and when I add more code/exe
     2. Vectors
     3. Folding on List
     4. Amortized analysis of algorithm an intro
-7. Topics from Scala with cats book 
-    i. from chapter 1 to chapter 7
+7. Scala with cats
+    1. Type classes
+    2. Monoids and semigroups
+    3. Functors
+    4. Monads
+    5. Monad Transformers
+    6. Semigroupal and applicative
+    7. Foldable and Traverse
 8. Effect system and more
     1. Concurrency basics and Future in scala.
     2. Intro to cats effects IO
