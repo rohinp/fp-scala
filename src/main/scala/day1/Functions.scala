@@ -1,22 +1,64 @@
 package day1
 
-object Functions {
+object Functions extends App {
   //Understanding functions in scala (functions are objects) ans SAM (Single Abstract Method)
   //lambdas to begin with
+  trait Show {
+    def display(str:String):String
+  }
+
+  val myShow = new Show {
+    override def display(str: String): String = s"Display from show $str"
+  }
+
+  val myShow1: Show = (str: String) => s"Display from show $str"
 
   //Functions vs Methods and Eta expansion (https://stackoverflow.com/questions/39445018/what-is-the-eta-expansion-in-scala)
 
-  //Passing by value and passing by name in scala methods, let's make code a bit lazy
+  def f(i:Int):Int = i * 2
+  val ff:Int => Int = (i:Int) => i * 2
+
+  def g(g:Int):Int = g + 2
+  val gg:Int => Int = (i:Int) => i + 2
 
   //Function curry
+  def triple(x:Int, y:Int, z:Int):Int = x + y + z
+  def triple1(x:Int)(y:Int)(z:Int):Int = x + y + z
+  def triple2:Int => Int => Int => Int =
+    x => y => z => x + y + z
+  triple(1,2,3)
+  val t1: Int => Int => Int = triple1(1)
+  val t2: Int => Int = t1(2)
+  val t2a: Int => Int = t1(3)
+  val t3: Int = t2(3)
 
-  //Partial Application
+  //curry help for eta expansion
+  List(triple2)
+
+  //why curry https://softwareengineering.stackexchange.com/questions/185585/what-is-the-advantage-of-currying
+  val add:Int => Int => Int = x => y => x + y
+  //important benefit of curry is writing abstract functions and also specialize where required
+
+  //curry also helps to do higher order functions
+  (1 to 10).map(add(2))
+
+  //Curry helps to do partial application
+
+  //interesting usage of curry
+
+  //Eta expansion
+  List(f _ , g _)
+  List[Int => Int](f, g)
+
+  //Passing by value and passing by name in scala methods, let's make code a bit lazy
+
 
   //Partial Functions a big no
 
+  //Basic Parametric polymorphic functions
+
   //Function composition (compose, andThen, tap, and pipe)
 
-  //Basic Parametric polymorphic functions
 
   /*
   Passing and returning function to and from a function, talking in terms of function
