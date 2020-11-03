@@ -44,7 +44,7 @@ object Functions extends App {
 
   //Curry helps to do partial application
 
-  //interesting usage of curry
+  //interesting usage of curry in Currying file
 
   //Eta expansion
   List(f _ , g _)
