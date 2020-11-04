@@ -52,7 +52,6 @@ object Functions extends App {
 
   //Passing by value and passing by name in scala methods, let's make code a bit lazy
 
-
   //Partial Functions a big no
 
   //Basic Parametric polymorphic functions
@@ -129,5 +128,7 @@ object Functions extends App {
   * 1. implicit parameter
   * 2. implicit conversion
   * 3. context bounds
+  * 4. Implicit class
+  * 5. Implicit errors annotation @implicitNotFound
   * */
 }

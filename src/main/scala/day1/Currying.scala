@@ -43,7 +43,11 @@ object Currying {
   //Lets take the below example taken from https://github.com/debasishg/frdomain
   sealed trait AccountType
   case object Checking extends AccountType
+  case object Savings extends AccountType
+
+  //dummy repo
   trait AccountRepository
+
   //version 1
   trait AccountService1[Account, Amount, Balance] {
     def open(no: String,

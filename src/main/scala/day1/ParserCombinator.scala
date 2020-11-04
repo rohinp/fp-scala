@@ -43,5 +43,37 @@ object ParserCombinator {
     //implement upper case parser using sat
     def upper:Parser[Char] = ???
 
+
+    /**
+     * Parse the string for a version
+     *  1.2.3
+     * */
+    sealed trait Version
+    case class Major(int:Int) extends Version
+    case class Minor(int:Int) extends Version
+    case class Patch(int:Int) extends Version
+
+
+    /**
+     * Exercise 1
+     * Parse string to get a person
+     * String is a ini file format data
+     * */
+    val stringToParse: String =
+      """
+        |[Person]
+        |name=John
+        |age=35
+        |""".stripMargin
+
+    case class Person(name:String, age:Int)
+
+    /**
+    * Exercise 2
+     * enhance version parsing with the semver specification
+     * https://semver.org/
+     * Idea is to have release and metadata in the version
+    * */
+
   }
 }
