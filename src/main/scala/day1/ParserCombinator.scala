@@ -7,8 +7,10 @@ object ParserCombinator {
   case class Parser[A](parse:String => List[(A,String)]) extends AnyVal {
     import Parser._
     def flatMap[B](f:A => Parser[B]):Parser[B] = bind(this)(f)
-    def map[B](f:A => B):Parser[B] = bind(this)(a => result(f(a)))
+    def map[B](f:A => B):Parser[B] = fmap(this)(f)
     def -->[B] (pb:Parser[B]): Parser[(A, B)] = seq(this)(pb)
+    def <*[B](pb:Parser[B]):Parser[A] = productL(this)(pb)
+    def *>[B](pb:Parser[B]):Parser[B] = productR(this)(pb)
   }
 
   object Parser {
@@ -47,8 +49,22 @@ object ParserCombinator {
       }
     }
 
+    def fmap[A,B]:Parser[A] => (A => B) => Parser[B] = p => f => bind(p)(a => result(f(a)))
+
+    //product Left
+    def productL[A,B]:Parser[A] => Parser[B] => Parser[A] = pa => pb => for {
+      a <- pa
+      _ <- pb
+    } yield a
+
+    //product Right
+    def productR[A,B]:Parser[A] => Parser[B] => Parser[B] = pa => pb => for {
+      _ <- pa
+      b <- pb
+    } yield b
+
     //sequence
-    def sequence[A](lp:Parser[A]*): Parser[List[A]] = Parser{ input =>
+    /*def sequence[A](lp:Parser[A]*): Parser[List[A]] = Parser{ input =>
       def loop(remainingInput:String,l:List[Parser[A]], acc:List[A]): List[(List[A], String)] = (remainingInput, l) match {
         case ("", _) => List.empty[(List[A],String)]
         case (in, Nil) => List((acc,in))
@@ -59,7 +75,7 @@ object ParserCombinator {
             }
       }
       loop(input, lp.toList, List.empty[A])
-    }
+    }*/
     //Exercise: try to implement seq using bind
 
     //Exercise sat combinator; Hint: implement using bind and item
@@ -83,19 +99,16 @@ object ParserCombinator {
     def letter: Parser[Char] = plus(lower)(upper)
     def alphanum: Parser[Char] = plus(letter)(digit)
 
-    def word:Parser[String] = {
-      def neWord: Parser[String] = bind(letter){
-        l => bind(word)(xs => result(l +  xs))
+    def stringSat:Parser[Char] => Parser[String] = p => {
+      def neWord: Parser[String] = bind(p){
+        l => bind(word)(xs => result(xs.prepended(l)))
       }
       plus(neWord)(result(""))
     }
 
-    def integer:Parser[String] = {
-      def neWord: Parser[String] = bind(digit){
-        l => bind(integer)(xs => result(l +  xs))
-      }
-      plus(neWord)(result(""))
-    }
+    def word:Parser[String] = stringSat(letter)
+    def integer:Parser[String] = stringSat(digit)
+
     /**
      * Parse the string for a version
      *  1.2.3
@@ -108,8 +121,8 @@ object ParserCombinator {
       major => bind(char('.')){
         _ => bind(integer){
           minor => bind(char('.')){
-            _ => bind(integer){
-              patch => result(Version(Major(major.toInt), Minor(minor.toInt), Patch(patch.toInt)))
+            _ => fmap(integer){
+              patch => Version(Major(major.toInt), Minor(minor.toInt), Patch(patch.toInt))
             }
           }
         }
@@ -117,10 +130,8 @@ object ParserCombinator {
     }
 
     def version1:Parser[Version] = for {
-      major <- integer
-      _ <- char('.')
-      minor <- integer
-      _ <- char('.')
+      major <- integer <* char('.')
+      minor <- integer <* char('.')
       patch <- integer
     } yield Version(Major(major.toInt),Minor(minor.toInt),Patch(patch.toInt))
 
@@ -148,8 +159,8 @@ object ParserCombinator {
                   name => bind(char('\n')){
                     _ => bind(word){
                       _ => bind(char('=')){
-                        _ => bind(integer){
-                          age => result(Person(name,age.toInt))
+                        _ => fmap(integer){
+                          age => Person(name,age.toInt)
                         }
                       }
                     }
@@ -163,10 +174,8 @@ object ParserCombinator {
     }
 
     def person1:Parser[Person] = for {
-      _ <- char('[') --> word -->  sequence(char(']') ,char('\n')) --> word --> char('=')
-      name <- word
-      _ <- char('\n') --> word --> char('=')
-      age <- integer
+      name <- (char('[') --> word -->  char(']') --> char('\n') --> word --> char('=')) *> word
+      age <- (char('\n') --> word --> char('=')) *> integer
     } yield Person(name,age.toInt)
 
     /**
