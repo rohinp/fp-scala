@@ -99,15 +99,15 @@ object ParserCombinator {
     def letter: Parser[Char] = plus(lower)(upper)
     def alphanum: Parser[Char] = plus(letter)(digit)
 
-    def stringSat:Parser[Char] => Parser[String] = p => {
+    def word:Parser[Char] => Parser[String] = p => {
       def neWord: Parser[String] = bind(p){
-        l => bind(word)(xs => result(xs.prepended(l)))
+        l => bind(word(p))(xs => result(xs.prepended(l)))
       }
       plus(neWord)(result(""))
     }
 
-    def word:Parser[String] = stringSat(letter)
-    def integer:Parser[String] = stringSat(digit)
+    def string:Parser[String] = word(letter)
+    def integer:Parser[String] = word(digit)
 
     /**
      * Parse the string for a version
@@ -150,14 +150,14 @@ object ParserCombinator {
     case class Person(name:String, age:Int)
 
     def person:Parser[Person] = bind(char('[')){
-      _ => bind(word){
+      _ => bind(string){
         _ => bind(char(']')){
           _ => bind(char('\n')){
-            _ => bind(word){
+            _ => bind(string){
               _ => bind(char('=')){
-                _ => bind(word){
+                _ => bind(string){
                   name => bind(char('\n')){
-                    _ => bind(word){
+                    _ => bind(string){
                       _ => bind(char('=')){
                         _ => fmap(integer){
                           age => Person(name,age.toInt)
@@ -174,8 +174,8 @@ object ParserCombinator {
     }
 
     def person1:Parser[Person] = for {
-      name <- (char('[') --> word -->  char(']') --> char('\n') --> word --> char('=')) *> word
-      age <- (char('\n') --> word --> char('=')) *> integer
+      name <- (char('[') --> string -->  char(']') --> char('\n') --> string --> char('=')) *> string
+      age <- (char('\n') --> string --> char('=')) *> integer
     } yield Person(name,age.toInt)
 
     /**
