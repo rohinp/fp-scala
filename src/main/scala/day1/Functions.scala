@@ -1,6 +1,6 @@
 package day1
 
-object Functions extends App {
+object Functions {
   //Understanding functions in scala (functions are objects) ans SAM (Single Abstract Method)
   //lambdas to begin with
   trait Show {

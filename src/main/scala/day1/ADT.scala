@@ -2,7 +2,7 @@ package day1
 
 import day1.CreatingTypes.PhoneType
 
-object ADT extends App {
+object ADT {
   //What is a Type
   //What is a Value
 

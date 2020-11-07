@@ -2,7 +2,7 @@ package day1
 
 import scala.Option
 
-object CreatingTypes extends App {
+object CreatingTypes {
   //Class in scala
 
   //Mostly we would avoid using class and use case classes
@@ -30,7 +30,7 @@ object CreatingTypes extends App {
   //named fields and default values assigned
   val add22 = new Address2(street = "street", postalCode = "1234", state = "state")
   //now the fields are public and immutable
-  add2.street
+  val s = add2.street
 
   //not recommended in FP, just to get familiar with scala syntax
   class Address3(
@@ -85,8 +85,8 @@ object CreatingTypes extends App {
   val t2 = (1, "second") // syntactic sugar for tuple
   val t22 = Tuple2(1,"second")
   //we can access tuple values with _{number} field names given by the tuple case class
-  t2._1
-  t2._2
+  val fst  = t2._1
+  val snd = t2._2
   t2.swap
   val t3 = (3, "three", 1.2d)
 

@@ -3,13 +3,22 @@ version := "0.0.1-SNAPSHOT"
 
 scalaVersion := "2.13.3"
 
+initialCommands in Compile in console :=
+  """
+    |import cats._
+    |import cats.data._
+    |import cats.implicits._
+    |import day1.Functions._
+    |import day1.ParserCombinator.Parser._
+    |""".stripMargin
+
 scalacOptions ++= Seq(
   "-encoding", "UTF-8",   // source files are in UTF-8
   "-deprecation",         // warn about use of deprecated APIs
   "-unchecked",           // warn about unchecked type parameters
   "-feature",             // warn about misused language features
   "-language:higherKinds",// allow higher kinded types without `import scala.language.higherKinds`
-  "-Xlint",               // enable handy linter warnings
+  //"-Xlint",               // enable handy linter warnings
   //"-Xfatal-warnings",      // turn compiler warnings into errors
   "-language:implicitConversions"
 )
