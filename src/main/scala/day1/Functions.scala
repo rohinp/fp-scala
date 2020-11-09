@@ -1,5 +1,7 @@
 package day1
 
+import java.text.NumberFormat
+
 object Functions {
   //Understanding functions in scala (functions are objects) ans SAM (Single Abstract Method)
   //lambdas to begin with
@@ -78,14 +80,26 @@ object Functions {
   def headMake22(l:List[Int]): String = (headO1 _).andThen(makeString1)(l)
   val headMake2: List[Int] => String = headO.andThen(makeString)
 
-  def addMarks:List[Int] => Int = _.sum
-  def calculateAverageMarks:Int => Int = _ / 6
-  def deriveAverage: List[Int] => Int = addMarks andThen calculateAverageMarks
-  def calculateAverage: List[Int] => Int = calculateAverageMarks compose addMarks
-  val listOfMark = List(82, 85, 83, 86, 84, 87)
-  println(deriveAverage(listOfMark))
-  println(calculateAverage(listOfMark))
+  //A simple case for pipe
+  //consider the following functions already defined
+  type Amount = Double
+  sealed trait Tax {
+    val formulae:Amount => Amount
+  }
 
+  object Tax {
+    case class VAT(formulae:Amount => Amount = _ * (3D / 100)) extends Tax
+    case class ServiceTax(formulae:Amount => Amount = _ * (2D / 100)) extends Tax
+    case class ServiceCharge(formulae:Amount => Amount) extends Tax
+
+    import scala.util.chaining._
+    val addTaxToTotal:Tax => Amount => Amount = tax => amount => tax.formulae(amount) + amount
+
+    def addTaxOnBill(totalAmount:Amount):Amount = ???
+
+    def addTaxOnBillWithDebug(totalAmount:Amount):Amount = ???
+
+  }
   //different construct used with function; type, trait and case class
 
   /*
