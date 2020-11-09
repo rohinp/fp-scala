@@ -2,12 +2,6 @@ package day2
 
 object ParametricPolymorphism {
 
-  //How many possible implementation are valid for the below function
-  def add(v1: Int, v2: Int): Int = ???
-
-  //How many possible implementation are valid for the below function
-  def addP[P](v1: P, v2: P): Int = ???
-
   //Introducing variance, covariance, contravariance and invariant
 
   /*
@@ -16,6 +10,14 @@ object ParametricPolymorphism {
    * */
 
   //Higher kinded types, how to create one.
+  //Kind *
+  trait F0
+  //kind * -> *
+  trait F1[T]
+  //kind * -> * -> *
+  trait F2[T[_]]
+  //kind * -> * -> * -> *
+  trait F3[T[_,_]]
 
   /*
     Exercise 2

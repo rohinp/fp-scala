@@ -1,10 +1,18 @@
 package day1
 
+/**
+ * We will be implementing a simple mono parser from here http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
+ * To begin with the exercise lets create a type for the parser
+ *
+ * Note:
+ *  this is the version one of the parser lib, we'll come back to implement better error handling in future
+ * */
 object ParserCombinator {
-  //We will be implementing a simple mono parser from here http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
-  //To begin with the exercise lets create a type for the parser
   //extending AnyVal removes the wrapper overhead at runtime for more information check here https://docs.scala-lang.org/overviews/core/value-classes.html
-  case class Parser[A](parse:String => List[(A,String)]) extends AnyVal
+  case class Parser[A](parse:String => List[(A,String)]) extends AnyVal {
+    //1. implement flatMap and map one below exercises are done
+    //2. implement left and right product and see how it helps
+  }
 
   object Parser {
     //Now that we have a parser type, let's create some primitive types
@@ -43,6 +51,13 @@ object ParserCombinator {
     //implement upper case parser using sat
     def upper:Parser[Char] = ???
 
+    //implement a parser to parse a sequence of chars .i.e a word
+    def word:Parser[String] = ???
+
+    //you might also need a parser for integer, if you make word a generic one you can reuse
+
+    //that's it now you can start implementing the below functions.
+    //Note: If you feel there can be more combinators, operators derived which can help to implement please go ahead and implement those
 
     /**
      * Parse the string for a version

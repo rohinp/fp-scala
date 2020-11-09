@@ -1,6 +1,7 @@
 package day1
 
 import scala.Option
+import scala.language.reflectiveCalls
 
 object CreatingTypes {
   //Class in scala
@@ -137,4 +138,20 @@ object CreatingTypes {
   import WeekDay._
 
   def isWorkingDay(d: WeekDay) = !(d == Sat || d == Sun)
+
+  //structural type
+  def func(stc:{def f:Int => Int; def x:Int => Int}):Int = stc.f(2)
+
+  def func1[A,B](stc:{def f:A => B}):Int = ???
+
+  class Someclass1 {
+    def f:Int => Int = _ * 12
+  }
+
+  class Someclass {
+    def f:Int => Int = _ * 12
+    def x:Int => Int = _ * 3
+  }
+  func(new Someclass)
+  func1(new Someclass1)
 }

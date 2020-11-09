@@ -55,9 +55,38 @@ object Functions {
   //Partial Functions a big no
 
   //Basic Parametric polymorphic functions
+  //How many possible implementation are valid for the below function
+  def add(v1: Int, v2: Int): Int = ???
+
+  //How many possible implementation are valid for the below function
+  def addP[P](v1: P, v2: P): P = ???
 
   //Function composition (compose, andThen, tap, and pipe)
+  //f: a -> b
+  def headO1(l:List[Int]): Option[Int] = l.headOption
+  def headO:List[Int] => Option[Int] = _.headOption
+  //g: b -> c
+  def makeString1(op:Option[Int]): String = op.fold(s"It didn't worked")(in => s"This is my number $in")
+  def makeString:Option[Int] => String = _.fold(s"It didn't worked")(in => s"This is my number $in")
+  //  g compose f = b -> c after a -> b = a -> c
+  def headMake00(l: List[Int]):String = makeString1(headO1(l))
+  val headMake0: List[Int] => String = l => makeString(headO(l))
 
+  def headMake11(l:List[Int]): String = (makeString1 _).compose(headO1)(l)
+  val headMake1: List[Int] => String = makeString.compose(headO)
+  //f andThen g =   a -> b andThen b -> c  = a -> c
+  def headMake22(l:List[Int]): String = (headO1 _).andThen(makeString1)(l)
+  val headMake2: List[Int] => String = headO.andThen(makeString)
+
+  def addMarks:List[Int] => Int = _.sum
+  def calculateAverageMarks:Int => Int = _ / 6
+  def deriveAverage: List[Int] => Int = addMarks andThen calculateAverageMarks
+  def calculateAverage: List[Int] => Int = calculateAverageMarks compose addMarks
+  val listOfMark = List(82, 85, 83, 86, 84, 87)
+  println(deriveAverage(listOfMark))
+  println(calculateAverage(listOfMark))
+
+  //different construct used with function; type, trait and case class
 
   /*
   Passing and returning function to and from a function, talking in terms of function
@@ -65,8 +94,23 @@ object Functions {
   */
   def show[A](a:A)(howToShow:A => String):String = ???
 
-  def compose[A,B,C](f:B => C, g:A => B): A => C = ???
-  def andThen[A,B,C](f:A => B, g:B => C): A => C = ???
+  def compose[A,B,C](g:B => C, f:A => B): A => C = a => g(f(a))
+  def andThen[A,B,C](f:A => B, g:B => C): A => C = a => g(f(a))
+
+  //practicing HoF which parametric polymorphic
+  def tupled[T1, T2, R](f: (T1, T2) => R): ((T1, T2)) => R = ???
+  def untupled[T1, T2, R](f: ((T1, T2)) => R): (T1, T2) => R = ???
+  def makeCurried[A,B,C](f:(A,B) => C): A => B => C = ???
+  def uncurry[A,B,C](f:A => B => C): (A, B) => C = ???
+  def flipArgs[A,B,C](f:A => B => C): B => A => C = ???
+  def fanOut[C, A, B](fst: C => A, snd: C => B): C => (A, B) = ???
+  def fanIn[C, A, B](h: C => (A, B)): (C => A, C => B) = ???
+  def bimap[A, A1, B, B1](f: A => A1, g: B => B1): ((A, B)) => (A1, B1) = ???
+  def either[C, A, B](f: A => C, g: B => C): Either[A, B] => C = ???
+  def chain[T](fs:Seq[T => T]):T => T = ???
+
+  //Can we convert any method which is not curred to a curried function
+  //if yes please write the implementation
 
   /*
     Exercise 1
@@ -79,11 +123,17 @@ object Functions {
   def bigger[A](v1: A, v2: A)(comparator:(A,A) => Comp):A = ???
   def smaller[A](v1: A, v2: A)(comparator:(A,A) => Comp):A = ???
 
-  def makeCurried[A,B,C](f:(A,B) => C): A => B => C = ???
-  def uncurry[A,B,C](f:A => B => C): (A, B) => C = ???
-  def flipArgs[A,B,C](f:A => B => C): B => A => C = ???
+  //write some test calls for bigger and smaller
 
   //Pure functions & side effects introduction
+  /*
+  * 1. It always returns a value
+  *   a. Always returns same value for the same input
+  * 2. No side effect (throwing exception, changing something which is global, latency, I/O, etc)
+  *   b. It manages side effect
+  *
+  * Why pure functions
+  * */
 
   //Simple recursion examples along with a recursive data structure
   sealed trait MyList[A]
