@@ -86,33 +86,60 @@ object Functions {
   sealed trait Tax {
     val formulae:Amount => Amount
   }
-
   object Tax {
     case class VAT(formulae:Amount => Amount = _ * (3D / 100)) extends Tax
     case class ServiceTax(formulae:Amount => Amount = _ * (2D / 100)) extends Tax
     case class ServiceCharge(formulae:Amount => Amount) extends Tax
 
     import scala.util.chaining._
-    val addTaxToTotal:Tax => Amount => Amount = tax => amount => tax.formulae(amount) + amount
+    val addTaxToTotal:Tax => Amount => Amount =
+      tax => amount => tax.formulae(amount) + amount
+    //{value}.pipe(f:value => {secondValue}).pipe(f:secondValue => {})
+    val addTaxOnBill_composition:Amount => Amount =
+      addTaxToTotal(ServiceCharge(_ * (4D / 100))) compose addTaxToTotal(ServiceTax()) compose addTaxToTotal(VAT())
 
-    def addTaxOnBill(totalAmount:Amount):Amount = ???
+    addTaxOnBill_composition(1200D)
 
-    def addTaxOnBillWithDebug(totalAmount:Amount):Amount = ???
+    val addTaxOnBill11:Amount => Amount =
+      _.pipe(addTaxToTotal(VAT()))
+        .pipe(addTaxToTotal(ServiceTax()))
+        .pipe(addTaxToTotal(ServiceCharge(_ * (4D / 100))))
+
+    def addTaxOnBill(totalAmount:Amount):Amount =
+      totalAmount
+        .pipe(addTaxToTotal(VAT()))
+        .pipe(addTaxToTotal(ServiceTax()))
+        .pipe(addTaxToTotal(ServiceCharge(_ * (4D / 100))))
+
+    def addTaxOnBillWithDebug(totalAmount:Amount):Amount =
+      totalAmount
+        .pipe(addTaxToTotal(VAT()))
+        .tap(_ => "This is not going to print...")
+        .tap(a => println(s"${a} is the VAT on amount $totalAmount"))
+        .pipe(addTaxToTotal(ServiceTax()))
+        .tap(a => println(s"${a} is the ServiceTax on amount $totalAmount"))
+        .pipe(addTaxToTotal(ServiceCharge(_ * (4D / 100))))
+        .tap(a => println(s"${a} is the ServiceCharge on amount $totalAmount"))
 
   }
   //different construct used with function; type, trait and case class
+  type MyFunc[A,B] = A => B
+  trait MyFunction1[A,B] extends (A => B)
+  case class FunctionWrapper[A,B](f: A => B)
 
   /*
   Passing and returning function to and from a function, talking in terms of function
   HOF and combinators
   */
-  def show[A](a:A)(howToShow:A => String):String = ???
+  def show[A](a:A)(howToShow:A => String):String = howToShow(a)
 
   def compose[A,B,C](g:B => C, f:A => B): A => C = a => g(f(a))
   def andThen[A,B,C](f:A => B, g:B => C): A => C = a => g(f(a))
 
   //practicing HoF which parametric polymorphic
-  def tupled[T1, T2, R](f: (T1, T2) => R): ((T1, T2)) => R = ???
+  def tupled[T1, T2, R](f: (T1, T2) => R): ((T1, T2)) => R =
+    input => f(input._1,input._2)
+
   def untupled[T1, T2, R](f: ((T1, T2)) => R): (T1, T2) => R = ???
   def makeCurried[A,B,C](f:(A,B) => C): A => B => C = ???
   def uncurry[A,B,C](f:A => B => C): (A, B) => C = ???
