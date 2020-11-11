@@ -106,6 +106,14 @@ object ParserCombinator {
       plus(neWord)(result(""))
     }
 
+    def rep[A]:Parser[A] => Parser[List[A]] = pa => {
+      def loop: Parser[List[A]] = for {
+        a <- pa
+        xs <- rep(pa)
+      } yield a :: xs
+      plus(loop)(result(List.empty[A]))
+    }
+
     def string:Parser[String] = word(letter)
     def integer:Parser[String] = word(digit)
 
