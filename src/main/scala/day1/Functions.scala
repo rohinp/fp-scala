@@ -2,6 +2,8 @@ package day1
 
 import java.text.NumberFormat
 
+import scala.annotation.{implicitNotFound, tailrec}
+
 object Functions {
   //Understanding functions in scala (functions are objects) ans SAM (Single Abstract Method)
   //lambdas to begin with
@@ -171,19 +173,39 @@ object Functions {
   * 1. It always returns a value
   *   a. Always returns same value for the same input
   * 2. No side effect (throwing exception, changing something which is global, latency, I/O, etc)
-  *   b. It manages side effect
+  *   b. It manages effect
   *
   * Why pure functions
   * */
 
   //Simple recursion examples along with a recursive data structure
-  sealed trait MyList[A]
+  sealed trait MyList[A] // nonEmpty(Cons(head, tail)) / empty
+  case class Cons[A](head:A, tail:MyList[A]) extends MyList[A]
+  case object Empty extends MyList[Nothing]
 
-  def head[A](list: MyList[A]):Option[A] = ???
-  def tail[A](list: MyList[A]):Option[MyList[A]] = ???
+  def head[A](list: MyList[A]):Option[A] = list match {
+    case Empty => None
+    case Cons(h, _) => Some(h)
+  }
 
-  //pardon the existential type here (https://blog.knoldus.com/back2basics-existential-types-in-scala/)
-  def length(list: MyList[A] forSome {type A}):Int = ???
+  def tail[A](list: MyList[A]):Option[MyList[A]] = list match {
+    case Empty => None
+    case Cons(_, t) => Some(t)
+  }
+
+  def length[A](list: MyList[A]):Int = {
+    @tailrec
+    def loop(l:MyList[A], acc:Int):Int = l match {
+      case Empty => acc
+      case Cons(_, t) => loop(t,acc + 1)
+    }
+
+    def loop1(l:MyList[A]):Int = l match {
+      case Empty => 0
+      case Cons(_, t) => 1 + loop1(t)
+    }
+    loop(list,0)
+  }
 
   /*
   * Exercise 2
@@ -217,9 +239,9 @@ object Functions {
 
   /*
   * 1. implicit parameter
-  * 2. implicit conversion
+  * 2. implicit conversion, not advised to be used
+  * 4. Implicit class, extension methods
   * 3. context bounds
-  * 4. Implicit class
   * 5. Implicit errors annotation @implicitNotFound
   * */
 }
