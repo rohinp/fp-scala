@@ -2,6 +2,8 @@ package day1
 
 import java.text.NumberFormat
 
+import cats.kernel.Monoid
+
 import scala.annotation.{implicitNotFound, tailrec}
 
 object Functions {
@@ -234,6 +236,9 @@ object Functions {
   * */
   def flatten[A](l:List[A])(implicit ev: A <:< List[A]):List[A] = ???
 
+  //introduction to map and flatmap
+
+
   /*A bit of implicits*/
   //https://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html
 
@@ -244,4 +249,10 @@ object Functions {
   * 3. context bounds
   * 5. Implicit errors annotation @implicitNotFound
   * */
+  import cats.implicits._
+  trait Test[T] {
+    implicit val monoidT:Monoid[T]
+    def addMe(t1:T,t2:T):T = t1 |+| t2
+  }
+
 }

@@ -23,11 +23,12 @@ An expected table of content will edit in future as and when I add more code/exe
     8. Function as data
     9. Recursion in functions
     10. Writing Lazy evaluated code
-5. Parametric polymorphism
-    1. Polymorphic functions
-    2. Parametrically in ADT
-    3. Recursive ADT
-    4. GADT
+5. Type level and Type system basics
+    1. Variance
+    1. Phantom Types
+    1. Existential Types
+    1. Type lambda and kind projector
+    1. GADT
 6. Data structures in scala (collections)
     1. List
     2. Vectors

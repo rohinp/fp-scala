@@ -1,6 +1,8 @@
 package day2
 
-object ParametricPolymorphism {
+object TypeLevel {
+  //phantom types
+
   /*
   * Subtyping and generics interactions can introduce
   * 1. type bounds or constraint on a generic type
