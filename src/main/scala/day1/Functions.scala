@@ -241,7 +241,7 @@ object Functions {
   def flatten[A](l:List[A])(implicit ev: A <:< List[A]):List[A] = ???
 
   //introduction to map and flatmap
-  
+
 
   /*A bit of implicits*/
   //https://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html

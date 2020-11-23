@@ -9,7 +9,7 @@ initialCommands in Compile in console :=
     |import cats.data._
     |import cats.implicits._
     |import day1.Functions._
-    |import day1.ParserCombinator.Parser._
+    |import day2.ParserCombinator.Parser._
     |""".stripMargin
 
 scalacOptions ++= Seq(

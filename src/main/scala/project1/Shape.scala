@@ -21,23 +21,25 @@ object Figure {
   case object EmptyFigure extends Figure
 }
 
-case class Shape(
+case class Shape[T](
     figure: Figure,
     originPoint: Coordinate,
-    cells: List[Cell[ Nothing ]] //need to update
+    cells: List[Cell[T]]
 )
 
 object Shape {
-  type Canvas = Shape
+  type Canvas = Shape[String]
 
   def makeCanvas(height: Int, width: Int): Canvas = {
     val originPoint: Coordinate = Coordinate(0,0)
     ???
   }
 
-  def rectangle(originPoint: Coordinate)(length: Int, bredth: Int): Shape = ???
-  def square(originPoint: Coordinate)(side: Int): Shape = ???
-  def circle(originPoint: Coordinate)(radius: Int): Shape = ???
+  def rectangle[T](originPoint: Coordinate)(length: Int, bredth: Int): Shape[T] = ???
+  def square[T](originPoint: Coordinate)(side: Int): Shape[T] = ???
+  def circle[T](originPoint: Coordinate)(radius: Int): Shape[T] = ???
 
-  def prettyPrint:Shape => String = ???
+  def stringFormat:Shape[String] => String = ???
+
+  def prettyPrint[T](f:Shape[T] => String):Shape[T] => String = f
 }
