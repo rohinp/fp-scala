@@ -56,11 +56,11 @@ object ForDesugared {
   gen1.map(x => {
     val x1 = x + 1
     (x, x1)
-  }).flatMap[Int]({
+  }).flatMap({
     case (x @ _, x1 @ _) => gen2.map((y: Int) => {
       val y1 = y + 1
       (y, y1)
-    }).map[Int]({
+    }).map({
       case (y @ _, y1 @ _) => x1 * y1
     })
   })
