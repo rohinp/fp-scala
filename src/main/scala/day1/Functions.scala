@@ -181,7 +181,11 @@ object Functions {
   * */
 
   //Simple recursion examples along with a recursive data structure
-  sealed trait MyList[A] // nonEmpty(Cons(head, tail)) / empty
+  sealed trait MyList[+A]{ self =>
+    def flatMap[B](f:A => MyList[B]):MyList[B] = ???
+    def map[B](f:A => B):MyList[B] = ???
+  }
+
   case class Cons[A](head:A, tail:MyList[A]) extends MyList[A]
   case object Empty extends MyList[Nothing]
 
@@ -237,7 +241,7 @@ object Functions {
   def flatten[A](l:List[A])(implicit ev: A <:< List[A]):List[A] = ???
 
   //introduction to map and flatmap
-
+  
 
   /*A bit of implicits*/
   //https://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html
