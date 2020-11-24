@@ -253,10 +253,5 @@ object Functions {
   * 3. context bounds
   * 5. Implicit errors annotation @implicitNotFound
   * */
-  import cats.implicits._
-  trait Test[T] {
-    implicit val monoidT:Monoid[T]
-    def addMe(t1:T,t2:T):T = t1 |+| t2
-  }
 
 }
