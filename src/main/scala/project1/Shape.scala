@@ -12,7 +12,7 @@ import scala.util.chaining._
  * {{{
  *    val length = 10
  *    val breadth = 15
- *    val rect:Shape[Rectangle] = rectangle(length, breadth) // returns a shape
+ *    val rect:Shape[Rectangle] = rectangle(Coordinate(12,18))(Rectangle(length, breadth)) // returns a shape
  *    //and not you can pass the origin and rectangle will draw the shape accordingly on the respective coordinates
  * }}}
  *
@@ -46,7 +46,7 @@ object Shape {
 
   def rectangle(originPoint: Coordinate): Rectangle => Shape = ???
   def square(originPoint: Coordinate):Square => Shape = ???
-  def circle[T](originPoint: Coordinate)(radius: Int): Shape = ???
+  def circle(originPoint: Coordinate)(radius: Int): Shape = ???
 
   def prettyPrint: Shape => String = ???
 }

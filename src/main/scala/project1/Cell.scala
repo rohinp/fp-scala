@@ -17,7 +17,7 @@ sealed trait Cell {
 }
 
 object Cell {
-  case class OccupiedCell[T](coordinate: Coordinate, colour: Colour) extends Cell
+  case class OccupiedCell(coordinate: Coordinate, colour: Colour) extends Cell
   case class EmptyCell(coordinate: Coordinate) extends Cell {
     override val colour: Colour = Colour.NoColour
   }
