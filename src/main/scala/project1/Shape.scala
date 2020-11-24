@@ -1,5 +1,10 @@
 package project1
 
+import cats.implicits._
+import day2.Optics.Prisms.Prism
+
+import scala.util.chaining._
+
 /**
   * <p>Shape is a a simple product type with information about a specific shape
   * <p>Shape represent a function which take a origin point and draws the respective shape accordingly
@@ -21,25 +26,36 @@ object Figure {
   case object EmptyFigure extends Figure
 }
 
-case class Shape[T](
-    figure: Figure,
-    originPoint: Coordinate,
-    cells: List[Cell[T]]
-)
+case class Shape(originPoint: Coordinate, cells:List[Cell])
 
 object Shape {
-  type Canvas = Shape[String]
+  import project1.Figure._
 
-  def makeCanvas(height: Int, width: Int): Canvas = {
-    val originPoint: Coordinate = Coordinate(0,0)
-    ???
-  }
+  type Canvas = Shape
 
-  def rectangle[T](originPoint: Coordinate)(length: Int, bredth: Int): Shape[T] = ???
-  def square[T](originPoint: Coordinate)(side: Int): Shape[T] = ???
-  def circle[T](originPoint: Coordinate)(radius: Int): Shape[T] = ???
+  /**
+    *{{{
+    * Example width * height = 6 * 4 canvas
+    * (0,0) (0,1) (0,2) (0,3) (0,4) (0,5)
+    * (1,0) (1,1) (1,2) (1,3) (1,4) (1,5)
+    * (2,0) (2,1) (2,2) (2,3) (2,4) (2,5)
+    * (3,0) (3,1) (3,2) (3,3) (3,4) (3,5)
+    * }}}
+    * */
+  def makeCanvas(height: Int, width: Int): Canvas = rectangle(Coordinate(0,0))(Rectangle(width,height))
 
-  def stringFormat:Shape[String] => String = ???
+  def rectangle(originPoint: Coordinate): Rectangle => Shape =
+    r => {
+      (for {
+        b <- originPoint.x to (originPoint.x + r.length)
+        l <- originPoint.y to (originPoint.y + r.breadth)
+      } yield Cell.emptyCell(Coordinate(b, l))).toList.pipe(Shape(originPoint, _))
+    }
 
-  def prettyPrint[T](f:Shape[T] => String):Shape[T] => String = f
+  def square(originPoint: Coordinate):Square => Shape =
+    s => rectangle(originPoint)(Rectangle(s.side,s.side))
+
+  def circle[T](originPoint: Coordinate)(radius: Int): Shape = ???
+
+  def prettyPrint: Shape => String = ???
 }

@@ -11,18 +11,17 @@ package project1
   *  <li>Constructors for cell can go into Cell companion
   *  <li>Feel free to choose if you want Cell to be a case class or trait or any other construct suitable
   * */
-sealed trait Cell[T] {
+sealed trait Cell {
   val coordinate: Coordinate
   val colour: Colour
-  val data:T
 }
 
 object Cell {
-  case class OccupiedCell[T](coordinate: Coordinate, colour: Colour, data:T) extends Cell[T]
-  case class EmptyCell(coordinate: Coordinate) extends Cell[Unit] {
+  case class OccupiedCell(coordinate: Coordinate, colour: Colour) extends Cell
+  case class EmptyCell(coordinate: Coordinate) extends Cell {
     override val colour: Colour = Colour.NoColour
-    override val data: Unit = ()
   }
 
-  def toOccupied[T]:Cell[T] => Cell[T] = ???
+  def emptyCell(coordinate: Coordinate):Cell = EmptyCell(coordinate)
+
 }
