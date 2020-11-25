@@ -250,8 +250,69 @@ object Functions {
   * 1. implicit parameter
   * 2. implicit conversion, not advised to be used
   * 4. Implicit class, extension methods
-  * 3. context bounds
+  * 3. context bounds, we will also see in type classes
   * 5. Implicit errors annotation @implicitNotFound
   * */
+
+
+  object parameter {
+    //interface functions
+    def add[A](a:A, b:A)(adder:A => A => A):A =
+      adder(a)(b)
+
+    val adder1:Int => Int => Int = x => y => x + y
+    add(12,13)(adder1)
+
+    val adder2:String => String => String = x => y => x + y
+    add("hello "," world")(adder2)
+
+    case class Amount1(value:Int,decimalPart:Int)
+    object Amount1{
+      val adder:Amount1 => Amount1 => Amount1 =
+        x => y => Amount1(x.value + y.value, x.decimalPart + y.decimalPart)
+    }
+    add(Amount1(12,13),Amount1(34,12))(Amount1.adder)
+  }
+  object implicitParameter {
+    def add[A](a:A, b:A)(implicit adder:A => A => A):A =
+      adder(a)(b)
+
+    implicit val adder1:Int => Int => Int = x => y => x + y
+    add(12,13)
+
+    implicit val adder2:String => String => String = x => y => x + y
+    add("hello "," world")
+
+    case class Amount1(value:Int,decimalPart:Int)
+    object Amount1{
+      implicit val adder:Amount1 => Amount1 => Amount1 =
+        x => y => Amount1(x.value + y.value, x.decimalPart + y.decimalPart)
+    }
+    add(Amount1(12,13),Amount1(34,12))
+  }
+
+  object implicitConversion {
+    case class Person(name:String)
+    object Person{
+      implicit def personToString(person:Person):String = person.name
+    }
+    case class Employee(name:String, code:String)
+    object Employee{
+      implicit def employeeToString(emp:Employee):String = emp.name + " -- " + emp.code
+    }
+    def formatIt(str: String):String = s"formatted string is $str"
+
+    formatIt(Employee("some name","123-234"))
+    formatIt(Person("John"))
+  }
+
+  object extensionMethods {
+    implicit class ColdSyntaxForList[A](a:List[A]) {
+      def cold:List[String] = a.map(_.toString)
+    }
+
+    List(1,2,3).cold
+  }
+
 
 }
