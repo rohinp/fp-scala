@@ -1,8 +1,8 @@
 package project1
 
-import cats.implicits._
-import day2.Optics.Prisms.Prism
+import project1.Cell._
 
+import scala.annotation.tailrec
 import scala.util.chaining._
 
 /**
@@ -26,7 +26,7 @@ object Figure {
   case object EmptyFigure extends Figure
 }
 
-case class Shape(originPoint: Coordinate, cells:List[Cell])
+case class Shape(originPoint: Coordinate, cells: List[Cell])
 
 object Shape {
   import project1.Figure._
@@ -42,20 +42,40 @@ object Shape {
     * (3,0) (3,1) (3,2) (3,3) (3,4) (3,5)
     * }}}
     * */
-  def makeCanvas(height: Int, width: Int): Canvas = rectangle(Coordinate(0,0))(Rectangle(width,height))
+  def makeCanvas(height: Int, width: Int): Canvas =
+    (for {
+      b <- 0 to width
+      l <- 0 to height
+    } yield EmptyCell(Coordinate(b, l))).toList.pipe(Shape(Coordinate(0, 0), _))
 
   def rectangle(originPoint: Coordinate): Rectangle => Shape =
     r => {
       (for {
         b <- originPoint.x to (originPoint.x + r.length)
         l <- originPoint.y to (originPoint.y + r.breadth)
-      } yield Cell.emptyCell(Coordinate(b, l))).toList.pipe(Shape(originPoint, _))
+      } yield OccupiedCell(Coordinate(b, l), Colour.NoColour)).toList
+        .pipe(Shape(originPoint, _))
     }
 
-  def square(originPoint: Coordinate):Square => Shape =
-    s => rectangle(originPoint)(Rectangle(s.side,s.side))
+  def square(originPoint: Coordinate): Square => Shape =
+    s => rectangle(originPoint)(Rectangle(s.side, s.side))
 
   def circle[T](originPoint: Coordinate)(radius: Int): Shape = ???
 
-  def prettyPrint: Shape => String = ???
+  def prettyPrint: Shape => String =
+    s => {
+      @tailrec
+      def loop(prevRow: Int, acc: String, cells: List[Cell]): String =
+        cells match {
+          case List() => acc
+          case OccupiedCell(Coordinate(row, _), _) :: xs if prevRow != row =>
+            loop(row, acc + "\n" + ".", xs)
+          case OccupiedCell(Coordinate(row, _), _) :: xs =>
+            loop(row, acc + ".", xs)
+          case EmptyCell(Coordinate(row, _)) :: xs if prevRow != row =>
+            loop(row, acc + "\n" + " ", xs)
+          case EmptyCell(Coordinate(row, _)) :: xs => loop(row, acc + " ", xs)
+        }
+      loop(0, "", s.cells)
+    }
 }

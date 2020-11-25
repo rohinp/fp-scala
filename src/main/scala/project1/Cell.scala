@@ -21,7 +21,4 @@ object Cell {
   case class EmptyCell(coordinate: Coordinate) extends Cell {
     override val colour: Colour = Colour.NoColour
   }
-
-  def emptyCell(coordinate: Coordinate):Cell = EmptyCell(coordinate)
-
 }
