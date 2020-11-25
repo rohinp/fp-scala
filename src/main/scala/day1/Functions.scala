@@ -238,7 +238,7 @@ object Functions {
   * introducing generalised types so early just to give you a taste of scala
   * https://blog.bruchez.name/2015/11/generalized-type-constraints-in-scala.html
   * */
-  def flatten[A](l:List[A])(implicit ev: A <:< List[A]):List[A] = ???
+  def flatten[A, B](l:List[A])(implicit ev: A <:< List[B]):List[B] = ???
 
   //introduction to map and flatmap
 
