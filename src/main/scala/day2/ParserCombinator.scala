@@ -13,6 +13,9 @@ object ParserCombinator {
     import Parser._
     def map[B](f: A => B): Parser[B] = bind(this)(a => result(f(a)))
     def flatMap[B](f: A => Parser[B]): Parser[B] = bind(this)(f)
+
+    def withFilter(p: A => Boolean): Parser[A] =
+      this.flatMap(a => if(p(a)) result(a) else zero)
   }
 
   object Parser {
@@ -84,7 +87,11 @@ object ParserCombinator {
 
     //Exercise sat combinator; Hint: implement using bind and item
     def sat: (Char => Boolean) => Parser[Char] = f =>
-      item.flatMap(c => if(f(c)) result(c) else zero)
+      for {
+        c <- item
+        if f(c)
+      } yield c
+      //item.flatMap(c => if(f(c)) result(c) else zero)
 
     //implement car parser using sat
     def char: Char => Parser[Char] = ch => sat(_ == ch)
