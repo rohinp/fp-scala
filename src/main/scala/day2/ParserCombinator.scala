@@ -51,6 +51,7 @@ object ParserCombinator {
 
     //this one ia going to be the most important parser combinator
     //3. Bind
+    //pa seq,
     def bind[A, B]: Parser[A] => (A => Parser[B]) => Parser[B] =
       pa =>
         f =>
@@ -102,6 +103,12 @@ object ParserCombinator {
       tuple_minor <- seq(digit)(char('.'))
       patch <- digit
     } yield (Major(tuple_major._1.toString.toInt), Minor(tuple_minor._1.toString.toInt), Patch(patch.toString.toInt))
+
+    //desugared code for versionParser 2
+    seq(digit)(char('.'))
+      .flatMap(tuple_major => seq(digit)(char('.'))
+        .flatMap(tuple_minor => digit
+          .map(patch => (Major(tuple_major._1.toString.toInt), Minor(tuple_minor._1.toString.toInt), Patch(patch.toString.toInt)))))
 
     //implement a parser to parse a sequence of chars .i.e a word
     def word: Parser[String] = ???
