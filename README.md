@@ -53,3 +53,8 @@ An expected table of content will edit in future as and when I add more code/exe
 11. Stream processing using FS2
     1. Stream basics
     2. Concurrency primitives by FS2
+    
+ # Use full links
+ 1. [GLOSSARY](https://docs.scala-lang.org/glossary/index.html)
+ 1. [scala-book](https://docs.scala-lang.org/overviews/scala-book/introduction.html#)
+ 1. [scala language reference](https://www.scala-lang.org/files/archive/spec/2.11/03-types.html)

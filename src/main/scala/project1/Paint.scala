@@ -2,7 +2,6 @@ package project1
 
 import project1.Figure._
 import project1.Shape._
-
 import scala.util.chaining._
 
 case class Paint[A](draw:Shape => (A,Shape)) {

@@ -137,7 +137,7 @@ object CreatingTypes {
   }
   import WeekDay._
 
-  def isWorkingDay(d: WeekDay) = !(d == Sat || d == Sun)
+  def isWorkingDay(d: WeekDay): Boolean = !(d == Sat || d == Sun)
 
   //structural type
   def func(stc:{def f:Int => Int; def x:Int => Int}):Int = stc.f(2)
