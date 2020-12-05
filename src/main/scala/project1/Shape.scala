@@ -26,7 +26,7 @@ object Figure {
   case object EmptyFigure extends Figure
 }
 
-case class Shape(originPoint: Coordinate, cells: List[Cell])
+case class Shape(cells: List[Cell])
 
 object Shape {
   import project1.Figure._
@@ -46,26 +46,36 @@ object Shape {
     (for {
       b <- 0 to width
       l <- 0 to height
-    } yield EmptyCell(Coordinate(b, l))).toList.pipe(Shape(Coordinate(0, 0), _))
+      cell = if(border(width,height)(Coordinate(b,l))) OccupiedCell(Coordinate(b, l),Colour.NoColour) else EmptyCell(Coordinate(b, l))
+    } yield cell).toList.pipe(Shape(_))
+
+  def border(width:Int, height:Int)(coordinate: Coordinate):Boolean =
+    List[Coordinate => Boolean](_.x == 0, _.y == 0, _.y == width, _.x == height)
+      .exists(_ (coordinate))
 
   def rectangle(originPoint: Coordinate): Rectangle => Shape =
     r => {
       (for {
-        b <- originPoint.x to (originPoint.x + r.length)
-        l <- originPoint.y to (originPoint.y + r.breadth)
+        b <- originPoint.x.toInt to (originPoint.x + r.length).toInt
+        l <- originPoint.y.toInt to (originPoint.y + r.breadth).toInt
       } yield OccupiedCell(Coordinate(b, l), Colour.NoColour)).toList
-        .pipe(Shape(originPoint, _))
+        .pipe(Shape(_))
     }
 
   def square(originPoint: Coordinate): Square => Shape =
     s => rectangle(originPoint)(Rectangle(s.side, s.side))
 
-  def circle[T](originPoint: Coordinate)(radius: Int): Shape = ???
+  def circle[T](originPoint: Coordinate):Circle => Shape = circle =>
+    (for {
+      degree <- 0 to 360
+      x = circle.radius * Math.cos(degree) + originPoint.x
+      y = circle.radius * Math.sin(degree) + originPoint.y
+    } yield OccupiedCell(Coordinate(x.toInt, y.toInt), Colour.NoColour)).toList.pipe(Shape(_))
 
   def prettyPrint: Shape => String =
     s => {
       @tailrec
-      def loop(prevRow: Int, acc: String, cells: List[Cell]): String =
+      def loop(prevRow: Double, acc: String, cells: List[Cell]): String =
         cells match {
           case List() => acc
           case OccupiedCell(Coordinate(row, _), _) :: xs if prevRow != row =>
@@ -78,4 +88,12 @@ object Shape {
         }
       loop(0, "", s.cells)
     }
+
+  def combine:Shape => Shape => Shape = s1 => s2 => {
+    s2.cells.foldLeft(s1.cells){
+      (acc, cell) => {
+        acc.map(e => if(e.coordinate == cell.coordinate) Cell.combine(e)(cell) else e)
+      }
+    }.pipe(Shape.apply)
+  }
 }

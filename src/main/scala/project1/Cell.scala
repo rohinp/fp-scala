@@ -21,4 +21,10 @@ object Cell {
   case class EmptyCell(coordinate: Coordinate) extends Cell {
     override val colour: Colour = Colour.NoColour
   }
+
+  def combine:Cell => Cell => Cell = c1 => c2 => (c1,c2) match {
+    case (o:OccupiedCell, _:EmptyCell) => o
+    case (_:EmptyCell, o:OccupiedCell) => o
+    case _ => c1
+  }
 }

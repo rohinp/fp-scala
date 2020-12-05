@@ -1,6 +1,5 @@
 package project1
 
-case class Coordinate(x:Int, y:Int)
+case class Coordinate(x:Double, y:Double)
 object Coordinate{
-
 }
