@@ -18,14 +18,18 @@ object Paint extends App {
   def paintIt(shape: Shape): Paint[Shape] =
     Paint(canvas => (shape, Shape.combine(canvas)(shape)))
 
+  def get: Paint[Shape] = Paint(p => (p, p))
+
   val program: Paint[Shape] = for {
     _ <- paintIt(square(Coordinate(5, 5))(Square(3)))
     _ <- paintIt(rectangle(Coordinate(10, 10))(Rectangle(20, 10)))
-    s <- paintIt(circle(Coordinate(40, 40))(Circle(15)))
+    _ <- paintIt(circle(Coordinate(40, 40))(Circle(15)))
+    s <- get
   } yield s
 
   program
-    .draw(makeCanvas(100, 100))._2
+    .draw(makeCanvas(100, 100))
+    ._2
     .pipe(prettyPrint)
     .pipe(println)
 }
