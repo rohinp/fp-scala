@@ -28,7 +28,8 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % "2.2.0" withSources(),
   "co.fs2" %% "fs2-core" % "2.4.4" withSources(),
   "org.scalatest" %% "scalatest" % "3.2.0" % Test,
-  "org.scalatest" %% "scalatest-wordspec" % "3.2.0" % Test
+  "org.scalatest" %% "scalatest-wordspec" % "3.2.0" % Test,
+  "org.scalacheck" %% "scalacheck" % "1.14.1" % Test
 )
 
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
