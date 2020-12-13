@@ -14,6 +14,7 @@ object TypeLevel {
   }
 
   class M extends MyType[Int]
+  //class M_ extends MyType
 
   // because of type erasure, the type information is lost after compilation and thus the code works
   // and doesn't complains for overriding the abstract type as it would have complained in case of a concrete type
@@ -149,19 +150,19 @@ object TypeLevel {
         * Inorder to understand lower bounds first we need to also understand type variance
         * as the example given below concerns with contravariant relation
         * */
-      /*trait Node[+B] {
-        def prepend(elem: B): Node[B]
+      trait Node[+B] {
+        def prepend[U >: B](elem: U): Node[U]
       }
 
       case class ListNode[+B](h: B, t: Node[B]) extends Node[B] {
-        def prepend(elem: B): ListNode[B] = ListNode(elem, this)
+        def prepend[U >: B](elem: U): ListNode[U] = ListNode(elem, this)
         def head: B = h
         def tail: Node[B] = t
       }
 
       case class Nil[+B]() extends Node[B] {
-        def prepend(elem: B): ListNode[B] = ListNode(elem, this)
-      }*/
+        def prepend[U >: B](elem: U): ListNode[U] = ListNode(elem, this)
+      }
     }
     object mixBounds {
       //I'll keep this on you to research and understand
