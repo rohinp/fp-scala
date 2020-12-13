@@ -1,10 +1,9 @@
 package day3.Implicits.sample
 
+import day3.Implicits.ExampleImplicitVal._
+//import day3.Implicits.ExampleImplicitDef._
 import day3.Implicits.sample.dao.EmployeeDAO
-import day3.Implicits.sample.datasource.{
-  EmployeeDataSource,
-  RemoteAPIDataSource
-}
+import day3.Implicits.sample.datasource.{EmployeeDataSource, RemoteAPIDataSource}
 import day3.Implicits.sample.models.Employee
 
 object EmployeeApp extends App {
@@ -13,8 +12,9 @@ object EmployeeApp extends App {
 
 //  def greet(employee: Employee): String =
 //    s"Hi ${employee.name} : ${employee.id}"
-
+//
 //  private val spongebob = Employee(1, "Spongebob")
 //  greet(spongebob)
+//
 //  spongebob.greet()
 }
