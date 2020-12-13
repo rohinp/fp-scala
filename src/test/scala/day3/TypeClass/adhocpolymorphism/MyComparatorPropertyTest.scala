@@ -21,7 +21,7 @@ class MyComparatorPropertyTest extends Properties("Comparator") {
 
   //these will fails as wrong implementation of comparator
   property("transitivityWrong") = forAll((f: Int) => {
-    wrongComparator.transitivity(x => y => z => pos(x) ==  pos(y) == pos(z))(f)(f + 1)(f + 2)
+    wrongComparator.transitivity(x => y => z => pos(x) ==  pos(y) && pos(x) == pos(z))(f)(f + 1)(f + 2)
   })
   property("antisymmetryWrong") = forAll((f: Int) => wrongComparator.antisymmetry(f)(f))
   property("reflexivityWrong") = forAll((f: Int) => wrongComparator.reflexivity(f))
