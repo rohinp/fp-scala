@@ -1,6 +1,6 @@
 package day3
 
-object TypeClass {
+object TypeClassTemplate {
   //Ad-hoc polymorphism and OCP
 
   //Things required to implement the pattern in scala
