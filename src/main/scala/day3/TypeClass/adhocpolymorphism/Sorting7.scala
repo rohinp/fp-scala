@@ -2,7 +2,7 @@ package day3.TypeClass.adhocpolymorphism
 
 import day3.TypeClass.subtypingpolymorphism.Company
 
-object Sorting6 {
+object Sorting7 {
   def sort[A : MyComparator](collection: List[A]): List[A] = collection match {
     case Nil => Nil
     case h :: t => insert(h, sort(t))
@@ -22,6 +22,6 @@ object Sorting6_helper {
 
   val listCompanies: List[Company] = ???
 
-  Sorting6.sort(listCompanies)
+  Sorting7.sort(listCompanies)
 }
 

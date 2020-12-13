@@ -1,5 +1,6 @@
 package day3.TypeClass.adhocpolymorphism
 
+import day1.Shape
 import day3.TypeClass.subtypingpolymorphism.Company
 
 object Sorting3 {
@@ -23,6 +24,8 @@ object Sorting3_helper {
     else if(c1.strength > c2.strength) 1
     else 0
   }
+
+  val compareShape: (Shape, Shape) => Int = (c1, c2) => ???
 
   val listCompanies: List[Company] = ???
 
