@@ -1,6 +1,6 @@
 package day3
 
-object TypeClass {
+object TypeClassTemplate {
   //Ad-hoc polymorphism and OCP
   //https://www.cse.iitk.ac.in/users/karkare/oldcourses/2010/cs653/Papers/ad-hoc-polymorphism.pdf
 
