@@ -18,7 +18,7 @@ object Sorting7 {
   }
 }
 
-object Sorting6_helper {
+object Sorting7_helper {
 
   val listCompanies: List[Company] = ???
 
