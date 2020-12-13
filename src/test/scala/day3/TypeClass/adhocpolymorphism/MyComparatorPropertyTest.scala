@@ -14,7 +14,7 @@ class MyComparatorPropertyTest extends Properties("Comparator") {
   def pos:Int => Boolean = _ >= 0
 
   property("transitivity") = forAll((f: Int) => {
-    myIntComparator.transitivity(x => y => z => pos(x) ==  pos(y) == pos(z))(f)(f + 1)(f + 2)
+    myIntComparator.transitivity(x => y => z => pos(x) ==  pos(y) && pos(x) == pos(z))(f)(f + 1)(f + 2)
   })
   property("antisymmetry") = forAll((f:Int) => myIntComparator.antisymmetry(f)(f))
   property("reflexivity") = forAll((f: Int) => myIntComparator.reflexivity(f))

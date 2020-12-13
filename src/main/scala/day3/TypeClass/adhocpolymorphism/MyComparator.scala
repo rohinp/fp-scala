@@ -7,8 +7,8 @@ trait MyComparator[T] {
 
   //Laws the types need to obey
   //https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#t:Ord
-  def transitivity(edgeCase:T => T => T => Boolean):T => T => T => Boolean = x => y => z => {
-    if(edgeCase(x)(y)(z)) true
+  def transitivity(notEdgeCase:T => T => T => Boolean):T => T => T => Boolean = x => y => z => {
+    if(!notEdgeCase(x)(y)(z)) true
     else ((compare(x, y) == (-1)) && (compare(y, z) == (-1))) && (compare(x , z) == (-1))
   }
 
