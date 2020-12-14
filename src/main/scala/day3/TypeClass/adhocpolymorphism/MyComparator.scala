@@ -5,7 +5,6 @@ import day3.TypeClass.subtypingpolymorphism.Company
 trait MyComparator[T] {
   def compare(t1: T, t2: T): Int
 
-  /*
   //Laws the types need to obey
   //https://hackage.haskell.org/package/base-4.14.0.0/docs/Prelude.html#t:Ord
 
@@ -22,7 +21,6 @@ trait MyComparator[T] {
   def antisymmetry:T => T => Boolean = x => y =>
     compare(x, y) == 0 && compare(x, y) == compare(y, x)
 
-   */
 }
 
 object MyComparator {
