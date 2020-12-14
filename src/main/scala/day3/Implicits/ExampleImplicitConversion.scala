@@ -3,7 +3,7 @@ package day3.Implicits
 import day3.Implicits.sample.datasource.{EmployeeDataSource, RemoteAPIDataSource}
 import day3.Implicits.sample.models.Employee
 
-object ExampleImplicitDef {
+object ExampleImplicitConversion {
   implicit def toEmployeeDataSource(
       remoteAPIDataSource: RemoteAPIDataSource
   ): EmployeeDataSource = new EmployeeDataSource {
