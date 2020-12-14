@@ -1,6 +1,7 @@
 package day3.TypeClass.adhocpolymorphism
 
 import day1.Shape
+import day3.Implicits.sample.models.Employee
 import day3.TypeClass.subtypingpolymorphism.Company
 
 object Sorting3 {
@@ -25,9 +26,13 @@ object Sorting3_helper {
     else 0
   }
 
+  def compare(s: String, t: String): Int = ???
+  def compare(d: Employee, t: Employee): Int = ???
+
   val compareShape: (Shape, Shape) => Int = (c1, c2) => ???
 
   val listCompanies: List[Company] = ???
 
   Sorting3.sort(listCompanies)(compareCompany)
+  Sorting3.sort(List.empty[Employee])(compare)
 }
