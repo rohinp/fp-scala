@@ -6,6 +6,7 @@ package day3.TypeClass
 // 2. Create an object PrintableInstances containing instances of Printable for String and Int.
 // 3. Define an object Printable with a generic interface method:
 //    format accepts a value of type A and a Printable of the corresponding type.
+//    As this is the interface method, the Printable parameter should be implicit.
 //    It uses the relevant Printable to convert the A to a String.
 // 4. Create an object called PrintableSyntax.
 // 5. Inside PrintableSyntax define an implicit class Print- ableOps[A] to wrap up a value of type A.
