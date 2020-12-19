@@ -9,113 +9,55 @@ package day2
   * */
 object ParserCombinator {
   //extending AnyVal removes the wrapper overhead at runtime for more information check here https://docs.scala-lang.org/overviews/core/value-classes.html
-  case class Parser[A](parse: String => List[(A, String)]) extends AnyVal {
-    import Parser._
-    def map[B](f: A => B): Parser[B] = bind(this)(a => result(f(a)))
-    def flatMap[B](f: A => Parser[B]): Parser[B] = bind(this)(f)
-
-    def withFilter(p: A => Boolean): Parser[A] =
-      this.flatMap(a => if(p(a)) result(a) else zero)
-  }
+  case class Parser[A](parse: String => List[(A, String)]) extends AnyVal
 
   object Parser {
     //Now that we have a parser type, let's create some primitive types
-    //this parser will always give a success
-    def result[A]: A => Parser[A] = a => Parser(in => List((a, in)))
+    //pure: this parser will always give a success
+    def result[A]: A => Parser[A] = ???
 
     //Zero parser is opposite of result, this one always fails
-    def zero[A]: Parser[A] = Parser(_ => List())
+    def zero[A]: Parser[A] = ???
 
     //now we will make some productive parsers
     //1. item parser, on success it take the first char and on failure it returns an empty list
-    def item: Parser[Char] =
-      Parser(in =>
-        in.headOption.fold(List.empty[(Char, String)])(ch =>
-          List((ch, in.tail))
-        )
-      )
+    def item: Parser[Char] = ???
 
     //introducing parser combinators
     //2 seq, is like a composition of two parsers, think more of a product
-    def seq1[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
-      pa =>
-        pb =>
-          Parser[(A, B)](in => {
-            val result1 = pa.parse(in)
-            result1.headOption.fold(List.empty[((A, B), String)]) { tas =>
-              {
-                val result2 = pb.parse(tas._2)
-                result2.headOption.fold(List.empty[((A, B), String)]) { tbs =>
-                  List(((tas._1, tbs._1), tbs._2))
-                }
-              }
-            }
-          })
+    def seq1[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
 
     //this one ia going to be the most important parser combinator
     //3. Bind
-    //pa seq,
-    def bind[A, B]: Parser[A] => (A => Parser[B]) => Parser[B] =
-      pa =>
-        f =>
-          Parser[B](in => {
-            pa.parse(in).headOption.fold(List.empty[(B, String)]) { t =>
-              f(t._1).parse(t._2)
-            }
-          })
+    def bind[A, B]: Parser[A] => (A => Parser[B]) => Parser[B] = ???
 
     //Exercise: try to implement seq using bind
-    def seq2[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
-      pa => pb => bind(pa)(a => bind(pb)(b => result((a, b))))
+    def seq2[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
 
-    def seq3[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
-      pa => pb => pa.flatMap(a => pb.map(b => (a,b)))
+    //with flatmap
+    def seq3[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
 
-    def seq[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
-      pa =>
-        pb =>
-          for {
-            a <- pa
-            b <- pb
-          } yield (a, b)
+    //with for expression
+    def seq[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
 
-    val versionParser1: Parser[(Major, Minor, Patch)] = for {
-      tuple_major <- seq(item)(item)
-      tuple_minor <- seq(item)(item)
-      patch <- item
-    }yield (Major(tuple_major._1.toString.toInt), Minor(tuple_minor._1.toString.toInt), Patch(patch.toString.toInt))
+    val versionParser1: Parser[Version.SemVer] = ???
 
     //Exercise sat combinator; Hint: implement using bind and item
-    def sat: (Char => Boolean) => Parser[Char] = f =>
-      for {
-        c <- item
-        if f(c)
-      } yield c
-      //item.flatMap(c => if(f(c)) result(c) else zero)
+    def sat: (Char => Boolean) => Parser[Char] = ???
 
     //implement car parser using sat
-    def char: Char => Parser[Char] = ch => sat(_ == ch)
+    def char: Char => Parser[Char] = ???
 
     //implement digit parser using sat
-    def digit: Parser[Char] = sat(_.isDigit)
+    def digit: Parser[Char] = ???
 
     //implement lower case parser using sat
-    def lower: Parser[Char] = sat(_.isLower)
+    def lower: Parser[Char] = ???
 
     //implement upper case parser using sat
-    def upper: Parser[Char] = sat(_.isUpper)
+    def upper: Parser[Char] = ???
 
-    val versionParser2: Parser[(Major, Minor, Patch)] = for {
-      tuple_major <- seq(digit)(char('.'))
-      tuple_minor <- seq(digit)(char('.'))
-      patch <- digit
-    } yield (Major(tuple_major._1.toString.toInt), Minor(tuple_minor._1.toString.toInt), Patch(patch.toString.toInt))
-
-    //desugared code for versionParser 2
-    seq(digit)(char('.'))
-      .flatMap(tuple_major => seq(digit)(char('.'))
-        .flatMap(tuple_minor => digit
-          .map(patch => (Major(tuple_major._1.toString.toInt), Minor(tuple_minor._1.toString.toInt), Patch(patch.toString.toInt)))))
+    val versionParser2: Parser[Version.SemVer] = ???
 
     //implement a parser to parse a sequence of chars .i.e a word
     def word: Parser[String] = ???
@@ -130,9 +72,13 @@ object ParserCombinator {
       *  1.2.3
       * */
     sealed trait Version
-    case class Major(int: Int) extends Version
-    case class Minor(int: Int) extends Version
-    case class Patch(int: Int) extends Version
+    object Version {
+      case class Major(int: Int) extends Version
+      case class Minor(int: Int) extends Version
+      case class Patch(int: Int) extends Version
+
+      case class SemVer(major: Major, minor: Minor, patch: Patch)
+    }
 
     /**
       * Exercise 1

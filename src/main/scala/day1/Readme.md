@@ -3,6 +3,7 @@
 1. We will introduce our self with scala and FP
     1. everything is object in scala.
         1. REPL examples
+    1. Pure function
     1. Why immutability.
         1. Something which we'll learn as we go ahead in FP
     1. Basic notion of thinking in FP

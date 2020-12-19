@@ -8,17 +8,13 @@ object TypeLevel {
     * <p>A type parameter is syntactically part of the type that it parameterizes, whereas a type member – like value members – is encapsulated,
     * <p>and must be selected explicitly. Similarly, type members are inherited, while type parameters are local to their class
     */
-  trait MyType[T] //type parameter
-  trait MyType_ { // abstract class with abstract type member
-    type T
-  }
+  //type parameter
+   // abstract class with abstract type member
 
-  class M extends MyType[Int]
   //class M_ extends MyType
 
   // because of type erasure, the type information is lost after compilation and thus the code works
   // and doesn't complains for overriding the abstract type as it would have complained in case of a concrete type
-  class M1 extends MyType_
 
   //Also remember that this wont work either, incompatible types
   /**
@@ -30,12 +26,10 @@ object TypeLevel {
     *  class M22[T](val x:T) extends MyType_
     * }}}
     * */
-  class M2 extends MyType_ {
-    type T = Int
-  } //concrete implementation with type T as Int
+
+  //concrete implementation with type T as Int
 
   //you can access the encapsulated type using project operator
-  val t: M2#T = 100
 
   /**
     * <p>So both type parameter and abstract types are useful
@@ -94,12 +88,6 @@ object TypeLevel {
       case class Apple(colour: String) extends Fruit
       case class Orange(colour: String) extends Fruit
 
-      case class BoxFruit[F <: Fruit](f: F) {
-        def boxColour: String = f.colour
-      }
-      val appleBox: BoxFruit[Apple] = BoxFruit(Apple("green"))
-      val orangeBox: BoxFruit[Orange] = BoxFruit(Orange("orange"))
-
       /**
         * This is from source code doc of scala.typeConstraints.scala file
         * <p>An instance of `A <:< B` witnesses that `A` is a subtype of `B`.
@@ -150,19 +138,19 @@ object TypeLevel {
         * Inorder to understand lower bounds first we need to also understand type variance
         * as the example given below concerns with contravariant relation
         * */
-      trait Node[+B] {
-        def prepend[U >: B](elem: U): Node[U]
+      /*trait Node[+B] {
+        def prepend(elem: B): Node[B]
       }
 
       case class ListNode[+B](h: B, t: Node[B]) extends Node[B] {
-        def prepend[U >: B](elem: U): ListNode[U] = ListNode(elem, this)
+        def prepend(elem: B): ListNode[B] = ListNode(elem, this)
         def head: B = h
         def tail: Node[B] = t
       }
 
       case class Nil[+B]() extends Node[B] {
-        def prepend[U >: B](elem: U): ListNode[U] = ListNode(elem, this)
-      }
+        def prepend(elem: B): ListNode[B] = ListNode(elem, this)
+      }*/
     }
     object mixBounds {
       //I'll keep this on you to research and understand
