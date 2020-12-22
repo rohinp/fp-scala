@@ -1,17 +1,24 @@
 package day1
 
-import day1.CreatingTypes.PhoneType
-
 object ADT {
   //What is a Type
   //What is a Value
 
   //A type with empty set
-
+  val nothing:Nothing = ???
   //A type with singleton set
+  val unit:Unit = ()
+
+  val bool1:Boolean = true
+  val bool2:Boolean = false
 
   //Tuples in scala
-
+  val t2 = (1,"tst")
+  t2._2
+  t2._1
+  val t22 = Tuple2[Int,String](1,"tst")
+  val t33 = Tuple3[Int,Int,Int](1,2,3)
+  val t3 = (1,2,3)
   //basic scala constructs use to represent a type {class, case class, trait, object, case object, sealed trait, Enumeration} and type alias
 
   //What is ADT? (Algebraic data type)

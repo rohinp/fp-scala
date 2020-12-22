@@ -1,10 +1,20 @@
 package day1
 
+import day1.CreatingTypes.Switchable
+
 import scala.Option
 import scala.language.reflectiveCalls
 
 object CreatingTypes {
   //Class in scala
+  class Address1(street:String, city:String, postalCode:String)
+  class Address2(val street:String,val city:String = "Almere",val postalCode:String)
+  object Address2{
+    def makeAddress(street:String, city:String, postalCode:String):Option[Address2] = ???
+  }
+
+  val a = new Address2(street = "MyStreet",postalCode =  "1339KP")
+  a.street
 
   //Mostly we would avoid using class and use case classes
   //We can have multiple constructors using `def this` method,
@@ -26,12 +36,14 @@ object CreatingTypes {
   /*
    * Class created does not have some boilerplate code which is given free when you create a case class
    * */
-
+  case class Address11(street:String, city:String, postalCode:String)
+  val aa1 = Address11.apply("s", "c", "p")
+  val aa2 = Address11("s", "c", "p")
    //syntactic sugar for apply
 
   /*
-  1. apply
-  2. unapply
+  1. apply -- constructing an object
+  2. unapply -- deconstructing an object
   3. equals and hashcode
   4. canEqual
   5. It makes the object serializable
@@ -61,6 +73,19 @@ object CreatingTypes {
 
   //Traits
   //As of now you can think of traits as java interface
+  trait Switchable {
+    val state:Boolean
+    def toggle:Switchable = if(this.state) new Switchable {
+      override val state: Boolean = false
+    }else new Switchable {
+      override val state: Boolean = true
+    }
+  }
+  case class Bulb(state:Boolean) extends Switchable
+  case class Fan(state:Boolean) extends Switchable
+  case class Heater(state:Boolean) extends Switchable
+
+  val b: Switchable = Bulb(true).toggle.toggle
 
   //also we can have some abstract behaviour behaviour
 
@@ -70,12 +95,19 @@ object CreatingTypes {
   // Define a new enumeration with a type alias and work with the full set of enumerated values
   //https://www.scala-lang.org/api/current/scala/Enumeration.html
   object WeekDay extends Enumeration {
-    type WeekDay = Value
     val Mon, Tue, Wed, Thu, Fri, Sat, Sun = Value
   }
   import WeekDay._
 
-  def isWorkingDay(d: WeekDay): Boolean = !(d == Sat || d == Sun)
+  def isWorkingDay(d: Value): Boolean = !(d == Sat || d == Sun)
 
   //structural type
+  def test(str:String,t:{def show(str:String):String}):String = t.show(str)
+
+  class Something{
+    def show(x:String):String = s"Hello from something $x"
+    def somethingElse:String = ""
+  }
+
+  test("rohin", new Something)
 }
