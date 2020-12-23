@@ -23,20 +23,46 @@ object ADT {
 
   //What is ADT? (Algebraic data type)
   //https://about.chatroulette.com/posts/algebraic-data-types/
+  case class Employee(name:String, id:Int)
+
+  case class MySwitches(sw1:Boolean, sw2:Boolean, sw3:Boolean)// 2 * 2  = 8 product type/ and
+
+  sealed trait SwitchStatus // or 1 + 1 = 2 sum types
+  case object ON extends SwitchStatus
+  case object OFF extends SwitchStatus
+
 
   //Sum type e.g. Boolean, Option, Either, etc. Or
+  sealed trait MyOption[T]
+  object MyOption {
+    case class MySome[T](t:T) extends MyOption[T]
+    case object MyNone extends MyOption[Nothing]
+  }
+  sealed trait MyEither[L,R]
+  object MyEither {
+    case class Left[L,R](l:L) extends MyEither[L,R]
+    case class Right[L,R](r:R) extends MyEither[L,R]
+  }
 
   /**
     * domain modeling using ADT
     * IoT Domain, representing devices communicating with Http and others with MQtt
     */
   sealed trait IoTProtocol
+  object IoTProtocol {
+    case class HTTP(host:String, port:String, path:String) extends IoTProtocol
+    case class MQtt(host:String, port:String) extends IoTProtocol
+  }
 
   /**
     * One more example, Shipping types
     */
   sealed trait ShippingType
-
+  object ShippingType {
+    case object Post extends ShippingType
+    case object FedX extends ShippingType
+    case object Air extends ShippingType
+  }
   /*
   All exercises below are assumed to be solved only using sealed trait , case classes and case objects
   Obviously you can be as creative as you want
@@ -60,10 +86,35 @@ object ADT {
     * For more details check here https://scala-lang.org/files/archive/spec/2.12/08-pattern-matching.html
     */
 
+  def chekShippingType(shippingType: ShippingType):String = shippingType match {
+    case ShippingType.Post => "It's going to take long..."
+    case ShippingType.FedX => "It'll arrive in 4-5 days"
+    case ShippingType.Air => "You'll get it tomorrow"
+  }
+
+  import IoTProtocol._
+  def makeIoTRequest(ioTProtocol: IoTProtocol):String = ioTProtocol match {
+    case HTTP(host, port, path) => s"My request is http on $host:$port://$path"
+    case MQtt(host, port) => s"My request is MqTT on $host:$port"
+  }
+
   //1.  Here we actually see the usage of unapply with match keyword
   //2.  Wild card or otherwise conditions
+  def chekShippingType1(shippingType: ShippingType):String = shippingType match {
+    case ShippingType.Post => "It's going to take long..."
+    case _ => "It'll arrive sooner"
+  }
   //3.  guards in pattern matching (if)
+  def makeIoTRequest1(ioTProtocol: IoTProtocol):String = ioTProtocol match {
+    case HTTP(host, port, path) if port == "80" => s"My request is http on $host://$path"
+    case HTTP(host, port, path)  => s"My request is http on $host:$port//$path"
+    case MQtt(host, port) => s"My request is MqTT on $host:$port"
+  }
   //4.  Handling alternate cases(|)
+  def chekShippingType2(shippingType: ShippingType):String = shippingType match {
+    case ShippingType.Post => "It's going to take long..."
+    case ShippingType.FedX | ShippingType.Air => "It'll arrive Soon"
+  }
   //5.  back ticks and capital letters in pattern match https://users.scala-lang.org/t/upper-case-letters-in-pattern-matching/5947/2
   //6.  Alias in pattern matching
   //7.  sealed traits and match errors in pattern matching

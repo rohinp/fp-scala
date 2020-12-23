@@ -1,5 +1,6 @@
 package day1
 
+import day1.ADT.ShippingType
 import day1.CreatingTypes.Switchable
 
 import scala.Option
