@@ -9,11 +9,49 @@ import scala.annotation.{implicitNotFound, tailrec}
 object Functions {
   //Understanding functions in scala (functions are objects) ans SAM (Single Abstract Method)
   //lambdas to begin with
+  /*
+  * interface Show<T> {
+  *   String show(T t);
+  * }
+  * */
+  trait Show[T] {
+    def show(t:T):String
+  }
+  val intShow1 = new Show[Int] {
+    override def show(t: Int): String = t.toString
+  }
+  val intShow2: Show[Int] = (t: Int) => t.toString
+
+  val func1:Function1[Int,Int] = new Function1[Int,Int] {
+    override def apply(v1: Int): Int = 2*v1
+  }
+  val func_1:Int => Int = v1 => 2 * v1
+
+  val func2:Function2[Int,Int,Int] = new Function2[Int,Int,Int] {
+    override def apply(v1: Int, v2: Int): Int = v1 + v2
+  }
+
+  val func_2:(Int, Int) => Int = (v1, v2) => v1 + v2
 
   //Functions vs Methods and Eta expansion (https://stackoverflow.com/questions/39445018/what-is-the-eta-expansion-in-scala)
-
+  val f:Int => Int = x => x * 2 //function
+  val duplicate_f: Int => Int = f
+  def ff(x:Int):Int = x * 2  //method
+  val f_from_ff1 = ff _
+  val f_from_ff2:Int => Int = ff
 
   //Function curry
+  //f:a -> b ; f:(a,b) -> c ; f:a -> b -> c ; f:a -> b -> c -> d
+  /*
+  def parseXML(dom:DOM)(f:parses The dom) = ???
+  val injectedDom = parseXML(XMLBookDOM)
+  val extractedAuthorNames = injectedDom(extractName)
+  val extractedBooksByAuthor = injectedDom(extractBook)
+  */
+  val adder:Int => Int => Int = x => y => x + y
+  val adderOf2: Int => Int = adder(2) // partial application
+  def adderDef(x:Int)(y:Int):Int = x + y
+  val addOf2Def: Int => Int = adderDef(2)
 
   //curry help for eta expansion
 
@@ -27,7 +65,7 @@ object Functions {
 
   //interesting usage of curry in Currying file
 
-  //Eta expansion
+  //More on functions, store in data structure an example
 
   //Passing by value and passing by name in scala methods, let's make code a bit lazy
 

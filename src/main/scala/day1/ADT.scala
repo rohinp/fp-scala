@@ -25,7 +25,7 @@ object ADT {
   //https://about.chatroulette.com/posts/algebraic-data-types/
   case class Employee(name:String, id:Int)
 
-  case class MySwitches(sw1:Boolean, sw2:Boolean, sw3:Boolean)// 2 * 2  = 8 product type/ and
+  case class MySwitches(sw1:Boolean, sw2:Boolean, sw3:Boolean)// 2 * 2 * 2  = 8 product type/ and
 
   sealed trait SwitchStatus // or 1 + 1 = 2 sum types
   case object ON extends SwitchStatus
@@ -116,8 +116,21 @@ object ADT {
     case ShippingType.FedX | ShippingType.Air => "It'll arrive Soon"
   }
   //5.  back ticks and capital letters in pattern match https://users.scala-lang.org/t/upper-case-letters-in-pattern-matching/5947/2
+  val str = "X"
+  val Yes = "Y"
+  val xs = "X"
+  str match {
+    case Yes => "it's not X"
+    case `xs` => "it's an X"
+    case _ => "something is wrong"
+  }
   //6.  Alias in pattern matching
+  def makeIoTRequest3(ioTProtocol: IoTProtocol):String = ioTProtocol match {
+    case http@HTTP(host, port, path) => s"My request is http on $http"
+    case m@MQtt(host, port) => s"My request is MqTT on $m"
+  }
   //7.  sealed traits and match errors in pattern matching
+
 
   /**
     * Exercise 4
