@@ -37,8 +37,23 @@ object Functions {
   val f:Int => Int = x => x * 2 //function
   val duplicate_f: Int => Int = f
   def ff(x:Int):Int = x * 2  //method
+  def ff1:Int => Int = x => x * 2  //method
   val f_from_ff1 = ff _
   val f_from_ff2:Int => Int = ff
+
+  List(ff1)
+
+  val spaceCheck:String => Boolean = str => str.contains(' ')
+  val digitCheck:String => Boolean = str => str.exists(ch => ch.isDigit)
+  def validate(str:String):Option[String] = {
+    val stringCheckFunctions: List[String => Boolean] = List(spaceCheck,digitCheck)
+    val result: List[Boolean] = stringCheckFunctions.map(f => f(str))
+    if(result.contains(true)){
+      None
+    }else {
+      Some(str)
+    }
+  }
 
   //Function curry
   //f:a -> b ; f:(a,b) -> c ; f:a -> b -> c ; f:a -> b -> c -> d
@@ -52,7 +67,20 @@ object Functions {
   val adderOf2: Int => Int = adder(2) // partial application
   def adderDef(x:Int)(y:Int):Int = x + y
   val addOf2Def: Int => Int = adderDef(2)
-
+  object partialApplication {
+    def validate(inputString:String):Option[String] = {
+      def validations:String => (String => Boolean) => Boolean = s => f => f(s)
+      def fixInputFunction: (String => Boolean) => Boolean = validations(inputString)
+      def spaceCheck:String => Boolean = str => str.contains(' ')
+      def digitCheck:String => Boolean = str => str.exists(ch => ch.isDigit)
+      def result: List[Boolean] = List(fixInputFunction(spaceCheck),fixInputFunction(digitCheck))
+      if(result.contains(true)){
+        None
+      }else {
+        Some(inputString)
+      }
+    }
+  }
   //curry help for eta expansion
 
   //why curry https://softwareengineering.stackexchange.com/questions/185585/what-is-the-advantage-of-currying
@@ -64,10 +92,31 @@ object Functions {
   //Curry helps to do partial application
 
   //interesting usage of curry in Currying file
+  /*
+  *
+  *
+  *
+  * */
+  def function1(a:Int,b:String):Float = { ??? }
+  val function3:(Int,String) => Float = ???
 
+  val function4:Int => String => Float = ???
+  def function2(a:Int)(b:String):Float = { ??? }
+
+  val function1:Int => Int = (v1: Int) => ???
+  val function2:Int => Int => Int = ???
   //More on functions, store in data structure an example
 
   //Passing by value and passing by name in scala methods, let's make code a bit lazy
+  def loop(int: Int):Int = int + loop(int + 1)
+  def myfunction(y:Int, x: => Int):Int = {
+    lazy val result = x
+    if(y < 100){
+      y
+    }else {
+      result + result
+    }
+  }
 
   //Partial Functions a big no
 
@@ -80,11 +129,21 @@ object Functions {
 
   //Function composition (compose, andThen, tap, and pipe)
   //f: a -> b
-
   //g: b -> c
   //  g compose f = b -> c after a -> b = a -> c
-
   //f andThen g =   a -> b andThen b -> c  = a -> c
+
+  //f: a -> b
+  val takeHead:List[Int] => Option[Int] = _.headOption
+  //g: b -> c
+  val formatHead:Option[Int] => String = _.toString
+
+  val composedFunction: List[Int] => String = formatHead.compose(takeHead)
+  val composedFunction2: List[Int] => String = takeHead andThen formatHead
+  val composedFunction1: List[Int] => String = list => formatHead(takeHead(list))
+
+  def compose[A,B,C](g: B => C,f: A => B):A => C = ???
+  def andThen[A,B,C](f: A => B, g: B => C):A => C = ???
 
   //A simple case for pipe
   //consider the following functions already defined
@@ -101,9 +160,20 @@ object Functions {
     val addTaxToTotal:Tax => Amount => Amount =
       tax => amount => tax.formulae(amount) + amount
     //{value}.pipe(f:value => {secondValue}).pipe(f:secondValue => {})
-    def addTaxOnBill(totalAmount:Amount):Amount = ???
+    def addTaxOnBill(totalAmount:Amount):Amount =
+      totalAmount.pipe(addTaxToTotal(VAT()))
+        .pipe(addTaxToTotal(ServiceTax()))
+        .pipe(addTaxToTotal(ServiceCharge( _ * (4D / 100))))
 
-    def addTaxOnBillWithDebug(totalAmount:Amount):Amount = ???
+    def addTaxOnBillWithDebug(totalAmount:Amount):Amount =
+      totalAmount
+        .tap(a => println(s"My initial amount was $a"))
+        .pipe(addTaxToTotal(VAT()))
+        .tap(a => println(s"My amount after vat is $a"))
+        .pipe(addTaxToTotal(ServiceTax()))
+        .tap(a => println(s"My amount after service tax is $a"))
+        .pipe(addTaxToTotal(ServiceCharge( _ * (4D / 100))))
+        .tap(a => println(s"My amount after service charge is $a"))
 
   }
   //different construct used with function; type, trait and case class

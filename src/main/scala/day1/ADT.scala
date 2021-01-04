@@ -216,4 +216,13 @@ object ADT {
   //Testing, create a sample person and tryout the person smart constructor
 
   //How to make scala compiler ignore wrapper classes using AnyVal
+
+  /*
+  * Account
+  * Checking, Savings, Recurring
+  * */
+
+  /*
+  * Traffic signal
+  * */
 }
