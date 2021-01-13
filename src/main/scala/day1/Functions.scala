@@ -138,11 +138,11 @@ object Functions {
   //g: b -> c
   val formatHead:Option[Int] => String = _.toString
 
-  val composedFunction: List[Int] => String = formatHead.compose(takeHead)
+  val composedFunction: List[Int] => String = formatHead compose takeHead
   val composedFunction2: List[Int] => String = takeHead andThen formatHead
   val composedFunction1: List[Int] => String = list => formatHead(takeHead(list))
 
-  def compose[A,B,C](g: B => C,f: A => B):A => C = ???
+  def compose[A,B,C](g: B => C,f: A => B):A => C = a => g(f(a))
   def andThen[A,B,C](f: A => B, g: B => C):A => C = ???
 
   //A simple case for pipe
@@ -187,7 +187,9 @@ object Functions {
   */
 
   //practicing HoF which parametric polymorphic
-  def tupled[T1, T2, R](f: (T1, T2) => R): ((T1, T2)) => R = ???
+  def tupled[T1, T2, R](f: (T1, T2) => R): ((T1, T2)) => R = tuple => tuple match {
+    case (t1, t2) => f(t1, t2)
+  }
 
   def untupled[T1, T2, R](f: ((T1, T2)) => R): (T1, T2) => R = ???
   def makeCurried[A,B,C](f:(A,B) => C): A => B => C = ???
@@ -226,7 +228,37 @@ object Functions {
   * */
 
   //Simple recursion examples along with a recursive data structure
-  sealed trait MyList[A]
+  sealed trait MyList[+A]
+  case class Cons[A](head:A, tail:MyList[A]) extends MyList[A]
+  case object Empty extends MyList[Nothing]
+
+  def head[A](list:MyList[A]):Option[A] = list match {
+    case Empty => None
+    case Cons(h,_) => Some(h)
+  }
+
+  def tail[A](list:MyList[A]):MyList[A] = list match {
+    case Empty => Empty
+    case Cons(_, xs) => xs
+  }
+
+  def length[A](list:MyList[A]):Int = {
+    @tailrec
+    def loop(l:MyList[A], acc:Int):Int = l match {
+      case Empty => acc
+      case Cons(_, xs) => loop(xs, acc + 1)
+    }
+
+    def loop1(l:MyList[A]):Int = l match {
+      case Empty => 0
+      case Cons(_, xs) => 1 + loop1(xs)
+    }
+    loop(list, 0)
+  }
+
+
+
+
 
   /*
   * Exercise 2
@@ -244,7 +276,7 @@ object Functions {
   * Exercise 4
   * implement a method fold on scala list
   * */
-  def fold[A,B](list: List[A])(zero:B)(f:(A, B) => B):List[B] = ???
+  def fold[A,B](list: MyList[A])(zero:B)(f:(B, A) => B):MyList[B] = ???
 
   /*
   * Exercise 5
