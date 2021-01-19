@@ -1,10 +1,6 @@
 package day1
 
-import java.text.NumberFormat
-
-import cats.kernel.Monoid
-
-import scala.annotation.{implicitNotFound, tailrec}
+import scala.annotation.tailrec
 
 object Functions {
   //Understanding functions in scala (functions are objects) ans SAM (Single Abstract Method)
@@ -228,9 +224,21 @@ object Functions {
   * */
 
   //Simple recursion examples along with a recursive data structure
-  sealed trait MyList[+A]
+  sealed trait MyList[+A] {
+    def flatMap[B](f:A => MyList[B]): MyList[B] = ???
+    def map[B](f:A => B): MyList[B] = flatMap(a => pure(f(a)))
+  }
+
   case class Cons[A](head:A, tail:MyList[A]) extends MyList[A]
   case object Empty extends MyList[Nothing]
+
+  def pure[A](a:A):MyList[A] = Cons(a, Empty)
+  def combine[A](a:MyList[A], b:MyList[A]):MyList[A] = ???
+
+  val result: MyList[Int] = for {
+    x <- Cons(2,Cons(3,Cons(4,Empty)))
+    y <- Cons(2,Cons(3,Cons(4,Empty)))
+  } yield x*y
 
   def head[A](list:MyList[A]):Option[A] = list match {
     case Empty => None
@@ -255,10 +263,6 @@ object Functions {
     }
     loop(list, 0)
   }
-
-
-
-
 
   /*
   * Exercise 2
