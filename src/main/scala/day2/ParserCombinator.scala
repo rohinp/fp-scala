@@ -8,6 +8,33 @@ package day2
   *  this is the version one of the parser lib, we'll come back to implement better error handling in future
   * */
 object ParserCombinator {
+  /*
+    val v  = "1.2.3"
+    Semver(Major(1), Minor(2), Patch(3))
+
+  * major: String => (Int,String)
+  * minor: String => (Int, String)
+  * patch: String => (Int, String)
+  *
+  * val (m, r1) = major(v)
+  * val (mi, r2) = minor(r1)
+  * val (p, r3) = patch(r2)
+  *
+    Semver(Major(m), Minor(mi), Patch(p))
+
+    case class Parser(p:String => (A, String)){
+      def map
+      def flatMap
+    }
+
+    for {
+      ma <- major
+      mi <- minor
+      pa <- patch
+    } yield Semver(Major(ma), Minor(mi), Patch(pa))
+
+  * */
+
   //extending AnyVal removes the wrapper overhead at runtime for more information check here https://docs.scala-lang.org/overviews/core/value-classes.html
   case class Parser[A](parse: String => List[(A, String)]) extends AnyVal
 
