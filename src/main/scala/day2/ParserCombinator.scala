@@ -12,9 +12,9 @@ object ParserCombinator {
     val v  = "1.2.3"
     Semver(Major(1), Minor(2), Patch(3))
 
-  * major: String => (Int,String)
-  * minor: String => (Int, String)
-  * patch: String => (Int, String)
+  * major: String => (Int,String) = str => (str.head, str.tail)
+  * minor: String => (Int, String) = ???
+  * patch: String => (Int, String) = ???
   *
   * val (m, r1) = major(v)
   * val (mi, r2) = minor(r1)
@@ -22,7 +22,20 @@ object ParserCombinator {
   *
     Semver(Major(m), Minor(mi), Patch(p))
 
-    case class Parser(p:String => (A, String)){
+    interface Parser<A> {
+      def parse(input:String):(A,String)
+    }
+    class Parser<A> {
+      private Functional<String, Tuple<A,String>> parser;
+      public Parser(Functional<String, Tuple<A,String>> p){
+        this.parser = p
+      }
+    }
+    class Parser[A](parser:String => (A, String)){
+      val p:String => (A, String) = parser
+    }
+
+    case class Parser[A](p:String => (A, String)){
       def map
       def flatMap
     }
@@ -41,18 +54,33 @@ object ParserCombinator {
   object Parser {
     //Now that we have a parser type, let's create some primitive types
     //pure: this parser will always give a success
-    def result[A]: A => Parser[A] = ???
+    def result[A]: A => Parser[A] = a => Parser(in => List((a, in)))
 
     //Zero parser is opposite of result, this one always fails
-    def zero[A]: Parser[A] = ???
+    def zero[A]: Parser[A] = Parser(_ => List())
 
     //now we will make some productive parsers
     //1. item parser, on success it take the first char and on failure it returns an empty list
-    def item: Parser[Char] = ???
+    def item1: Parser[Char] = Parser(in => {
+      in.headOption match {
+        case Some(v) => List((v, in.tail))
+        case _ => List()
+      }
+    })
+
+    def item: Parser[Char] =
+      Parser(in => in.headOption.fold(List.empty[(Char,String)])(v => List((v, in.tail))))
 
     //introducing parser combinators
     //2 seq, is like a composition of two parsers, think more of a product
-    def seq1[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
+    def seq1[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
+      pa => pb => Parser(in => {
+        pa.parse(in).headOption.fold(List.empty[((A,B),String)])(result1 => {
+          pb.parse(result1._2).headOption.fold(List.empty[((A,B),String)]){
+           result2 =>  List(((result1._1, result2._1),result2._2))
+          }
+        })
+      })
 
     //this one ia going to be the most important parser combinator
     //3. Bind
