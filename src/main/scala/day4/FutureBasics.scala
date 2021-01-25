@@ -2,7 +2,7 @@ package day4
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import Utilities._
+import day4.basics.Utilities._
 object FutureBasics extends App {
   //disclaimer: I assume people are aware of concurrency on JVM
 
