@@ -1,7 +1,10 @@
 package day4.threadpool
 
 import day4.basics.Utilities
-
+/**
+* Manual mechanism to terminate a thread rather than running indefinitely as in SynchronizedPool
+ * that's why it's a gracefully shutdown
+* */
 object SynchronizedGracefulShutdown extends App {
 
   import scala.collection._
@@ -15,7 +18,10 @@ object SynchronizedGracefulShutdown extends App {
 
     def poll(): Option[() => Unit] =
       tasks.synchronized {
+        //no tasks and not terminated then goes into wait
         while (tasks.isEmpty && !terminated) tasks.wait()
+        //tasks are available and not terminated then deque
+        //else None
         if (!terminated) Some(tasks.dequeue()) else None
       }
 

@@ -4,12 +4,36 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import day4.basics.Utilities._
 object FutureBasics extends App {
-  //disclaimer: I assume people are aware of concurrency on JVM
+  /*
+  disclaimer: I assume people are aware of concurrency on JVM.
 
-  //little bit out fork true
+  Expectations is the participants are already aware about how to create/run a Thread, Thread state and pit falls.
+
+  In either case the day4 package contains a lot of examples and notes from Learning Concurrent programming in Scala book
+  which is enough to understand the basics.
+  */
+
+  //First Step:
+  //Important: Running programs on a separate JVM process then sbt
+
+  /**
+   * what and why about thread pool
+   *  1. Executor / ExecutorService
+   *  2. implementations of Executor (executor.ExecutorCreate)
+   * the defaults in scala
+   * Issues with thread pool (starvation on blocking tasks)
+   * */
+
+
 
   //1. Concurrency using Future and Promise in scala
     //What is a Future
+      /**
+       * 1. imagining future as a place holder
+       * 2. difference between future computations and future value
+       * 3. Example reading sbt file
+      * */
+
   /*
   * 1. Future has a companion object and a trait
   *   a. Future.apply is the factory method in the companion object

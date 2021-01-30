@@ -10,12 +10,14 @@ object Volatile extends App {
   @volatile var found = false
 
   for (p <- pages) yield thread {
+    log(p.txt)
     var i = 0
-    while (i < p.txt.length && !found)
+    while (i < p.txt.length && !found) {
       if (p.txt(i) == '!') {
         p.position = i
         found = true
       } else i += 1
+    }
   }
 
   while (!found) {}
