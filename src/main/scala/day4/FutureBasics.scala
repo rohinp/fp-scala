@@ -18,13 +18,16 @@ object FutureBasics extends App {
 
   /**
    * what and why about thread pool
-   *  1. Executor / ExecutorService
-   *  2. implementations of Executor (executor.ExecutorCreate)
+   *  1. implementations of Executor (executor.ExecutorCreate)
    * the defaults in scala
    * Issues with thread pool (starvation on blocking tasks)
    * */
 
 
+  /**
+   * Brief introduction to Union types in Scala
+   * Either and Try
+  */
 
   //1. Concurrency using Future and Promise in scala
     //What is a Future
