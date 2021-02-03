@@ -1,13 +1,15 @@
 package day4.executor
 
-import day4.basics.Utilities._
+import day4.basics.Utilities.log
 
-import java.util.concurrent._
+import java.util.concurrent.{Executor, ForkJoinPool}
 
 object ExecutorsCreate extends App {
   /**
    * Executor is a convenient way to run a task inside a thread
+   * Executor object decides on which thread and when to call the run method.
    *  1. Lets create an example executor and run some tasks
+   *
    *
    * There are different factory methods to create a thread pool (Executors class)
    *
@@ -21,7 +23,8 @@ object ExecutorsCreate extends App {
    *  <b>Note</b> : If none of the executors provided by the above factory methods meet your needs,
    *  constructing instances of java.util.concurrent.ThreadPoolExecutor or java.util.concurrent.ScheduledThreadPoolExecutor will give you additional options.
    **/
-  val executor: Executor = new java.util.concurrent.ForkJoinPool
+
+  val executor: Executor = new ForkJoinPool
 
   executor.execute(new Runnable {
     def run() = log("This task is run asynchronously.1")
@@ -29,7 +32,5 @@ object ExecutorsCreate extends App {
   executor.execute(new Runnable {
     def run() = log("This task is run asynchronously.2")
   })
-
-  Thread.sleep(500)
 
 }

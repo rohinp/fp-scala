@@ -1,5 +1,7 @@
 package day4.futures
 
+import scala.util.{Failure, Success}
+
 object FuturesCallbacks extends App {
   import scala.concurrent._
   import ExecutionContext.Implicits.global

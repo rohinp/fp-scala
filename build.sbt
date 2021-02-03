@@ -27,6 +27,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % "2.0.0" withSources(),
   "org.typelevel" %% "cats-effect" % "2.2.0" withSources(),
   "co.fs2" %% "fs2-core" % "2.4.4" withSources(),
+  "commons-io" % "commons-io" % "2.8.0" withSources(),
   "org.scalatest" %% "scalatest" % "3.2.0" % Test,
   "org.scalatest" %% "scalatest-wordspec" % "3.2.0" % Test,
   "org.scalacheck" %% "scalacheck" % "1.14.1" % Test

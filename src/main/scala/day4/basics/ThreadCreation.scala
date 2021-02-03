@@ -20,6 +20,8 @@ object ThreadCreation extends App {
     override def run(): Unit = log("New Thread running")
   }
   val t = new MyThread
+  val t1 = new Thread(() => log("New Thread running"))
+
   t.start()
   t.join()
   log("New thread joined")

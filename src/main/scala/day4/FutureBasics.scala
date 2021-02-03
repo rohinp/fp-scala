@@ -19,34 +19,35 @@ object FutureBasics extends App {
   /**
    * what and why about thread pool
    *  1. implementations of Executor (executor.ExecutorCreate)
-   * the defaults in scala
-   * Issues with thread pool (starvation on blocking tasks)
    * */
 
-
   /**
-   * Brief introduction to Union types in Scala
+   * Brief introduction to disjunctions/union types in Scala
    * Either and Try
   */
 
   //1. Concurrency using Future and Promise in scala
-    //What is a Future
+    //What is a Future (Asynchronous computation)
       /**
        * 1. imagining future as a place holder
        * 2. difference between future computations and future value
-       * 3. Example reading sbt file
+       * 3. First example of future
+       * 4. What is a Promise?
+       * 5. Lets create our own future
+       * 6. future call back bridge pattern
+       * 7.
       * */
 
   /*
+  Notes:
   * 1. Future has a companion object and a trait
   *   a. Future.apply is the factory method in the companion object
   *   b. onSuccess, onFailure
   *   c. combinators of future
   *   d. for expression
   *   e. sequencing future
-  *   f. Future is not lazy
-  *   g. Future is not a monad
-  *   h. Execution context and types
+  *   f. Future is eager in nature (not lazy)
+  *   g. Future is not a monad (not really imp at this point)
   * 2. Awaitable is the parent of Future trait
   *   i. So that you can await or ready on a result
   *
@@ -62,5 +63,7 @@ object FutureBasics extends App {
   log("Hello from main thread")
 
   scala.io.StdIn.readLine()
+
+  Future.sequence(List(Future(1),Future(1),Future(1)))
 
 }

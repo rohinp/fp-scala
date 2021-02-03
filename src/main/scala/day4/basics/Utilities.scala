@@ -5,9 +5,8 @@ object Utilities {
     println(s"${Thread.currentThread().getName}: $msg")
 
   def thread(body: => Unit): Thread = {
-    val t = new Thread {
-      override def run(): Unit = body
-    }
+    val t = new Thread(() => body)
+    t.setDaemon(true)
     t.start()
     t
   }
