@@ -17,12 +17,27 @@ object ThreadCreation extends App {
     *
     * */
   class MyThread extends Thread {
-    override def run(): Unit = log("New Thread running")
+    override def run(): Unit = log("User Thread - no delay")
   }
+  val threadGroup = new ThreadGroup("NewGroup")
   val t = new MyThread
-  val t1 = new Thread(() => log("New Thread running"))
 
+  val t1 = new Thread(threadGroup ,() => {
+    Thread.sleep(200)
+    log("Demon with  join")
+  })
+  val t3 = new Thread(() => {
+    log("Demon with no join no delay")
+  })
+  val t2 = new Thread(threadGroup, () => {
+    Thread.sleep(1000)
+    log("User Thread")
+  })
+  t1.setDaemon(true)
+  t3.setDaemon(true)
   t.start()
-  t.join()
-  log("New thread joined")
+  t1.start()
+  t2.start()
+  t1.join()
+  log("This is main")
 }

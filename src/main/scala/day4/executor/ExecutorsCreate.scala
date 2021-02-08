@@ -22,6 +22,12 @@ object ExecutorsCreate extends App {
    *
    *  <b>Note</b> : If none of the executors provided by the above factory methods meet your needs,
    *  constructing instances of java.util.concurrent.ThreadPoolExecutor or java.util.concurrent.ScheduledThreadPoolExecutor will give you additional options.
+   *
+   *  1. A executor implementation which creates worker(thread) which are daemon, the thread are executed till jvm exists
+   *  1. Executor executes the submitted task in current thread, s separate thread or later from a que of tasks depending on the implementation
+   *  1. Executor execute method is eager in evaluation check ExecutorTry object for examples
+   *
+   *  <b>Important</b> Be careful on making the tasks submitted to executor context to be non blocking otherwise you might end up having a starvation scenario
    **/
 
   val executor: Executor = new ForkJoinPool

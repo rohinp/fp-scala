@@ -5,6 +5,8 @@ object FuturesDataType extends App {
   import scala.concurrent._
   import ExecutionContext.Implicits.global
   import scala.io.Source
+  //import scala.jdk.CollectionConverters._
+  import scala.util.Using
   /**
    * Important:
    * future are eager in nature
@@ -15,6 +17,11 @@ object FuturesDataType extends App {
    * </ul>
    *
    * */
+
+  def readFile(fileName: String):Future[List[String]] =
+    Future.fromTry{
+      Using(Source.fromFile(fileName, "UTF8")){resource => resource.getLines().toList}
+    }
 
 
 

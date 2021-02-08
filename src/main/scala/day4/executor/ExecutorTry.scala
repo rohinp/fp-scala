@@ -14,27 +14,24 @@ object ExecutorTry extends App {
     override def execute(command: Runnable): Unit = thread(command.run())
   }
 
-  val executor3 = new Executor {
-    override def execute(command: Runnable): Unit = thread(command.run())
-  }
-
   val executor = new ForkJoinPool
 
   executor1.execute(() => {
     Thread.sleep(100)
-    log("Executor 1")
+    log("Current Thread Executor")
   })
   executor2.execute(() => {
     Thread.sleep(100)
-    log("Executor 2")
-  })
-  executor3.execute(() => {
-    Thread.sleep(100)
-    log("Executor 3")
+    log("New Thread Executor")
   })
 
-  executor.execute(() => {
-    Thread.sleep(100)
-    log("Executor 4")
-  })
+  for {
+    x <- 1 to 10
+  } yield{
+    executor.execute(() => {
+      Thread.sleep(10)
+      log(s"Fork Join Executor $x")
+    })
+  }
+
 }
