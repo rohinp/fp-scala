@@ -49,9 +49,27 @@ object ParserCombinator {
   * */
 
   //extending AnyVal removes the wrapper overhead at runtime for more information check here https://docs.scala-lang.org/overviews/core/value-classes.html
-  case class Parser[A](parse: String => List[(A, String)]) extends AnyVal
+  case class Parser[A](parse: String => List[(A, String)]) extends AnyVal {
+    import Parser._
+    //flatMap :: A => F[B] => F[A] => F[B]
+    def flatMap[B](f:A => Parser[B]):Parser[B] = bind(this)(f)
+    //Map :: A => B => F[A] => F[B]
+    def map[B](f:A => B):Parser[B] = bind(this)(a => result(f(a)))
 
-  object Parser {
+    def <*[B]: Parser[B] => Parser[A] =
+      pb => for{
+        a <- this
+        _ <- pb
+      } yield a
+
+    def *>[B]: Parser[B] => Parser[B] =
+      pb => for{
+        _ <- this
+        b <- pb
+      } yield b
+  }
+
+  object Parser extends App {
     //Now that we have a parser type, let's create some primitive types
     //pure: this parser will always give a success
     def result[A]: A => Parser[A] = a => Parser(in => List((a, in)))
@@ -84,38 +102,102 @@ object ParserCombinator {
 
     //this one ia going to be the most important parser combinator
     //3. Bind
-    def bind[A, B]: Parser[A] => (A => Parser[B]) => Parser[B] = ???
+    def bind[A, B]: Parser[A] => (A => Parser[B]) => Parser[B] =
+      pa => f => Parser(in => {
+          pa.parse(in).headOption match {
+          case None => List()
+          case Some((a, remainingString)) => f(a).parse(remainingString)
+        }
+      })
 
     //Exercise: try to implement seq using bind
-    def seq2[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
+    def seq2[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
+      pa => pb => bind(pa)(a => bind(pb)(b => result((a,b))))
 
     //with flatmap
-    def seq3[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
+    def seq3[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
+      pa => pb => pa.flatMap(a => pb.map(b => (a,b)))
 
     //with for expression
-    def seq[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] = ???
+    def seq[A, B]: Parser[A] => Parser[B] => Parser[(A, B)] =
+      pa => pb => for{
+        a <- pa
+        b <- pb
+      } yield (a, b)
 
-    val versionParser1: Parser[Version.SemVer] = ???
+    val version = "1.2.3"
+    val versionParser1: Parser[Version.SemVer] =
+      for {
+        major <- item
+        _ <- item
+        minor <- item
+        _ <- item
+        patch <- item
+      } yield Version.SemVer(Version.Major(major), Version.Minor(minor), Version.Patch(patch))
 
     //Exercise sat combinator; Hint: implement using bind and item
-    def sat: (Char => Boolean) => Parser[Char] = ???
+    def sat1: (Char => Boolean) => Parser[Char] = f => bind(item)(ch => {
+      if(f(ch)) result(ch) else zero[Char]
+    })
+
+    def sat: (Char => Boolean) => Parser[Char] = f => item.flatMap(ch => {
+      if(f(ch)) result(ch) else zero
+    })
+
+    def sat2: (Char => Boolean) => Parser[Char] = ???
 
     //implement car parser using sat
-    def char: Char => Parser[Char] = ???
+    def char: Char => Parser[Char] = ch => sat(_ == ch)
 
     //implement digit parser using sat
-    def digit: Parser[Char] = ???
+    def digit: Parser[Char] = sat(_.isDigit)
 
     //implement lower case parser using sat
-    def lower: Parser[Char] = ???
+    def lower: Parser[Char] = sat(_.isLower)
 
     //implement upper case parser using sat
-    def upper: Parser[Char] = ???
+    def upper: Parser[Char] = sat(_.isUpper)
 
-    val versionParser2: Parser[Version.SemVer] = ???
+    //1.2.3
+    val versionParser2: Parser[Version.SemVer] =
+      for {
+        major <- digit
+        _ <- char('.')
+        minor <- digit
+        _ <- char('.')
+        patch <- digit
+      } yield Version.SemVer(
+        Version.Major(major.toString.toInt),
+        Version.Minor(minor.toString.toInt),
+        Version.Patch(patch.toString.toInt)
+      )
+
+    def productL[A,B]: Parser[A] => Parser[B] => Parser[A] =
+      pa => pb => for{
+        a <- pa
+        _ <- pb
+      } yield a
+
+    def productR[A,B]: Parser[A] => Parser[B] => Parser[B] =
+      pa => pb => for{
+        _ <- pa
+        b <- pb
+      } yield b
+
+    val versionParser3: Parser[Version.SemVer] =
+      for {
+        major <- digit <* char('.')
+        minor <- digit <* char('.')
+        patch <- digit
+      } yield Version.SemVer(
+        Version.Major(major.toString.toInt),
+        Version.Minor(minor.toString.toInt),
+        Version.Patch(patch.toString.toInt)
+      )
 
     //implement a parser to parse a sequence of chars .i.e a word
     def word: Parser[String] = ???
+    def integer: Parser[Int] = ???
 
     //you might also need a parser for integer, if you make word a generic one you can reuse
 
