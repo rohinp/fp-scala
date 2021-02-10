@@ -4,7 +4,7 @@ object PromisesAndCustomOperations extends App {
   import scala.concurrent._
   import ExecutionContext.Implicits.global
   import day4.basics.Utilities._
-
+import scala.concurrent.duration._
   implicit class FutureOps[T](val self: Future[T]) {
     def or(that: Future[T]): Future[T] = {
       val p = Promise[T]

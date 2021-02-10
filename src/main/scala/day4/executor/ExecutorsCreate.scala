@@ -30,13 +30,6 @@ object ExecutorsCreate extends App {
    *  <b>Important</b> Be careful on making the tasks submitted to executor context to be non blocking otherwise you might end up having a starvation scenario
    **/
 
-  val executor: Executor = new ForkJoinPool
 
-  executor.execute(new Runnable {
-    def run() = log("This task is run asynchronously.1")
-  })
-  executor.execute(new Runnable {
-    def run() = log("This task is run asynchronously.2")
-  })
 
 }

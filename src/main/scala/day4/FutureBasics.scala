@@ -56,14 +56,5 @@ object FutureBasics extends App {
   *
   * */
 
-  Future{
-    log("Hello from future")
-  }
-
-  log("Hello from main thread")
-
-  scala.io.StdIn.readLine()
-
-  Future.sequence(List(Future(1),Future(1),Future(1)))
-
+  //https://stackoverflow.com/questions/32987855/what-are-advantages-of-a-twitter-future-over-a-scala-future
 }

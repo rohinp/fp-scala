@@ -18,10 +18,6 @@ object FuturesDataType extends App {
    *
    * */
 
-  def readFile(fileName: String):Future[List[String]] =
-    Future.fromTry{
-      Using(Source.fromFile(fileName, "UTF8")){resource => resource.getLines().toList}
-    }
 
 
 
