@@ -1,5 +1,7 @@
+/*
+//Here we begin with a really simple example
 def sum1(xs:List[Int]):Int =
-  xs.foldLeft(0)((acc, v) => acc + v)
+  xs.foldLeft(0)((acc, v) => acc + v)*/
 
 /*
 not compiling
@@ -80,12 +82,47 @@ implicit class CombineSyntax[A:Combine](a:A){
   def zero:A = Combine[A].unit
 }
 
-def sum[A:Combine](xs:List[A]):A =
+def sum4[A:Combine](xs:List[A]):A =
   xs.foldLeft(Combine[A].unit)((acc, v) => acc |+| v)
+
+//higher kinded types F[_] = DS[_]
+trait FoldLeft[F[_]]{
+  def foldL[A,B](structure:F[A])(unit:B)(f:(B,A) => B):B
+}
+
+object FoldLeft {
+  def apply[F[_]](implicit f:FoldLeft[F]) = f
+
+  implicit val foldLeftList: FoldLeft[List] = new FoldLeft[List] {
+    override def foldL[A,B](structure: List[A])(unit: B)(f: (B, A) => B) =
+      structure.foldLeft(unit)(f)
+  }
+}
+
+implicit class FoldSyntax[F[_]:FoldLeft,A](fa:F[A]){
+  def fold[B](unit:B)(f:(B,A) => B):B = FoldLeft[F].foldL(fa)(unit)(f)
+}
+//A = * , List = * -> * F[_]
+/*def sum[A:Combine, F[_]](xs:F[A])(implicit f:FoldLeft[F]):A = {
+  //val instanceOfFold = FoldLeft[F,A,A]
+  f.foldL(xs)(Combine[A].unit)((acc, v) => acc |+| v)
+}*/
+def sum[A:Combine, F[_]:FoldLeft](xs:F[A]):A = {
+  xs.fold(Combine[A].unit)((acc, v) => acc |+| v)
+}
 
 sum(List("a", "b"))
 sum(List(1,2,3))
 
-//laws can be tested using property based testing
-Combine[Int].zeroAssociativity(1)
+/**
+ * Type class/ Ad-hoc
+ *
+ * 1. Trait - behaviour
+ * 2. Type (Int, String,etc any custom type)
+ * 3. Instances for a given type of the Trait (inside companion)
+ * 4. Interface methods (place where we use type class)
+ * 5. Laws for property testing
+ * 6. Syntax
+ * 7. Summoner
+ * */
 
